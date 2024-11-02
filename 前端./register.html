@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>mybloger</title>
+  <link rel="stylesheet" href="{% static 'bootstrap5/bootstrap.min.css' %}">
+  <script src="{% static 'bootstrap5/popper.min.js' %}"></script>
+  <script src="{% static 'bootstrap5/bootstrap.min.js' %}"></script>
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+</head>
+
+<body>
+  <header class=" text-bg-light border-bottom mb-3">
+    <div class="container">
+      <header
+        class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+        <div class="col-md-3 mb-2 mb-md-0">
+          <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none">
+            <img src="{% static 'image/logo.png' %}" class="img-fluid" alt=" mybloger logo" width="150" height="150">
+          </a>
+        </div>
+
+        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+          <li><a href="#" class="nav-link px-2 link-secondary">首页</a></li>
+          <li><a href="#" class="nav-link px-2">发布博客</a></li>
+          <li><a href="#" class="nav-link px-2">Pricing</a></li>
+          <li><a href="#" class="nav-link px-2">FAQs</a></li>
+          <li><a href="#" class="nav-link px-2">About</a></li>
+        </ul>
+
+        <div class="col-md-3 text-end">
+          <button type="button" class="btn btn-outline-primary me-2">Login</button>
+          <button type="button" class="btn btn-primary">Sign-up</button>
+        </div>
+      </header>
+    </div>
+  </header>
+  <main class="container bg-white p-3 rounded mb-3">
+    <h1>Register</h1>
+    <div style="max-width: 330px;" class="mx-auto">
+      <h1>Register</h1>
+      <form action="" method="post">
+        <div class="mb-3">
+          <label for="username" class="form-label">user_name</label>
+          <input type="text" class="form-control" name="username" id="username" placeholder="user_name" required>
+        </div>
+        <div class="mb-3">
+          <label for="username" class="form-label">email box</label>
+          <input type="email" class="form-control" name="email" id="username" placeholder="Enter email" required>
+        </div>
+        <div class="mb-3">
+          <label for="username" class="form-label">check number</label>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" name="check_number" id="username" placeholder="Enter check number"
+              required>
+            <button type="button" class="btn btn-outline-secondary">Get check number</button>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">password</label>
+          <input type="password" class="form-control" name="password" id="password" placeholder="Enter password"
+            required>
+        </div>
+        <div class="mb-3 ">
+          <button type="submit" class="btn btn-primary w-100">Register recently</button>
+        </div>
+      </form>
+    </div>
+  </main>
+</body>
+
+</html>
