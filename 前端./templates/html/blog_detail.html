@@ -1,0 +1,43 @@
+{% extends 'html/base.html' %}
+
+{% block title %}mybloger{% endblock %}
+
+{% block main%}
+  <h1>Django教程详情</h1>
+  <hr>
+  <div class="mt-2">
+    <img src="{% static 'image/avatar.webp' %}" class="rounded-circle" width="30" height="30" alt="">
+    <span class="ms-2">作者: 张三</span>
+    <span class="ms-2">发布时间: 2022-01-01</span>
+  </div>
+  <hr>
+  <div class="py-3">
+    blog details
+  </div>
+  <hr>
+  <div class="mt-2">
+    <h3>评论(10):</h3>
+    <form action="" ,method="post">
+        <div class="mt-2">
+            <input type="text" class="form-control" placeholder="请输入评论">
+        </div>
+        <div class="text-end mt-2">
+            <button class="btn btn-primary mt-2" type="submit">提交评论</button>
+        </div>
+    </form>
+  </div>
+  <div class="mt-2">
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+            <div class="d-flex justify-content-between text-dark-emphasis">
+                <div class="user-info">
+                    <img src="{% static 'image/avatar.webp' %}" class="rounded-circle" width="40" height="40" alt="">
+                    <span class="ms-2">pridelzh</span>
+                </div>
+                <div class="create-time" style="line-height: 40px;">2022-01-01 12:00:00</div>
+            </div>
+            <div class="mt-2">zhangsan评论了: 评论内容</div>
+        </li>
+    </ul>
+  </div>
+{% endblock %}
