@@ -1,0 +1,96 @@
+<script>
+    // 文件按钮点击后显示新建打开保存另存为的选项
+    const fileButton = document.querySelector('.file-button');
+    const fileOptions = document.createElement('div');
+    fileOptions.classList.add('file-options');
+    fileOptions.innerHTML = `
+      <button>新建</button>
+      <br>
+      <button>打开</button>
+      <br>
+      <button>保存</button>
+      <br>
+      <button>另存为</button>
+      <br>
+    `;
+
+    // 将选项容器添加到 body 中
+    document.body.appendChild(fileOptions);
+
+    // 点击文件按钮显示或隐藏选项
+    fileButton.addEventListener('click', () => {
+      if (fileOptions.style.display === 'none') {
+        fileOptions.style.display = 'block';
+      } else {
+        fileOptions.style.display = 'none';
+      }
+    });
+    // 自动标注按钮点击后显示标注病变部位，标注健康部位的按钮
+    const autoButton = document.querySelector('.auto-button');
+    const autoOptions = document.createElement('div');
+    autoOptions.classList.add('auto-options');
+    autoOptions.innerHTML = `
+      <button>标注健康部位</button>
+      <br>
+      <button>标注病变部位</button>
+      <br>
+    `;
+
+    // 将选项容器添加到 body 中
+    document.body.appendChild(autoOptions);
+
+    // 点击自动标注按钮按钮显示或隐藏选项
+    autoButton.addEventListener('click', () => {
+      if (autoOptions.style.display === 'none') {
+        autoOptions.style.display = 'block';
+      } else {
+        autoOptions.style.display = 'none';
+      }
+    });
+    // 云端按钮点击后显示的按钮
+    const transferButton = document.querySelector('.transfer-button');
+    const transferOptions = document.createElement('div');
+    transferOptions.classList.add('transfer-options');
+    transferOptions.innerHTML = `
+      <button>接收文件</button>
+      <br>
+      <button>上传文件</button>
+      <br>
+      <button>传输文件给</button>
+    `;
+
+    // 将选项容器添加到 body 中
+    document.body.appendChild(transferOptions);
+
+    // 点击自动标注按钮按钮显示或隐藏选项
+    transferButton.addEventListener('click', () => {
+      if (transferOptions.style.display === 'none') {
+        transferOptions.style.display = 'block';
+      } else {
+        transferOptions.style.display = 'none';
+      }
+    });
+    // 点击图形按钮鼠标样式为十字准线
+    const ovalButtons = document.querySelectorAll('.oval-button');
+    ovalButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        document.body.style.cursor = 'crosshair';
+      });
+    });
+    // 点击刷子按钮改变鼠标样式为刷子
+    const brushButton = document.querySelector('.brush-button');
+    brushButton.addEventListener('click', () => {
+      document.body.style.cursor = 'url(brush.png), auto';
+    });
+
+    // 点击鼠标按钮恢复鼠标默认样式
+    const mouseButton = document.querySelector('.mouse-button');
+    mouseButton.addEventListener('click', () => {
+      document.body.style.cursor = 'default';
+    });
+    // 点击tag按钮鼠标样式为标签图形
+    const tagButton = document.querySelector('.tag-button');
+    tagButton.addEventListener('click', () => {
+      document.body.style.cursor = 'url(标签图片.png), auto';
+    });
+  </script>
