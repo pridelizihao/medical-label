@@ -3,167 +3,66 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>医学标注平台</title>
-  <style>
-    .not-frame {
-      flex: 2;
-      /* 按钮在弹性容器中占据剩余空间 */
-      height: 80px;
-      width: 100px;
-      font-size: 16px;
-    }
-
-    .litlesize {
-      height: 40px;
-      width: 33px;
-    }
-
-
-
-    .haveframe {
-      /* 按钮在弹性容器中占据剩余空间 */
-      height: 50px;
-      width: 50px;
-      font-size: 16px;
-    }
-
-    .folder-line {
-      position: relative;
-      display: inline-block;
-      align-items: flex-start;
-    }
-
-    .folder-line span {
-      margin-right: 100px;
-      /* 让文件夹和竖线之间有间隙 */
-    }
-
-    .folder-line::after {
-      content: "";
-      width: 1px;
-      height: 100vh;
-      background-color: black;
-      position: absolute;
-      top: -5px;
-      /* 向上调整一点，与上方文字更紧密 */
-      left: 100%;
-    }
-
-    .dashed-box {
-      border: 2px dashed black;
-      width: 600px;
-      height: 500px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: absolute;
-      top: 30%;
-      left: calc(35% + 10px);
-      /* 调整这个值来控制与竖线的间距 */
-    }
-
-    .plus-sign {
-      font-size: 100px;
-      font-weight: 50;
-    }
-
-    .main-content {
-      position: absolute;
-      top: 30%;
-      left: calc(35% + 10px);
-      width: 500px;
-      height: 400px;
-      border: 1px solid #ccc;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>mybloger</title>
+  <link rel="stylesheet" href="{% static 'bootstrap5/bootstrap.min.css' %}">
+  <script src="{% static 'bootstrap5/popper.min.js' %}"></script>
+  <script src="{% static 'bootstrap5/bootstrap.min.js' %}"></script>
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
 </head>
 
 <body>
-  <div style="display:flex;justify-content:flex-start;">
-    <div style="display:flex;">
-      <button class="not-frame">文件</button>
-      <button class="not-frame">工具</button>
-      <button class="not-frame">自动标注</button>
-      <button class="not-frame">云端</button>
-      <button class="not-frame">编辑</button>
-      <button class="not-frame">窗口</button>
-      <button class="not-frame">关闭</button>
-      <button class="not-frame">帮助</button>
-      <button class="not-frame">视图</button>
-      <button class="not-frame">测量</button>
+  <header class=" text-bg-light border-bottom mb-3">
+    <div class="container">
+      <header
+        class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+        <div class="col-md-3 mb-2 mb-md-0">
+          <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none">
+            <img src="{% static 'image/logo.png' %}" class="img-fluid" alt=" mybloger logo" width="150" height="150">
+          </a>
+        </div>
+
+        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+          <li><a href="#" class="nav-link px-2 link-secondary">首页</a></li>
+          <li><a href="#" class="nav-link px-2">发布博客</a></li>
+          <li><a href="#" class="nav-link px-2">Pricing</a></li>
+          <li><a href="#" class="nav-link px-2">FAQs</a></li>
+          <li><a href="#" class="nav-link px-2">About</a></li>
+        </ul>
+
+        <div class="col-md-3 text-end">
+          <button type="button" class="btn btn-outline-primary me-2">Login</button>
+          <button type="button" class="btn btn-primary">Sign-up</button>
+        </div>
+      </header>
     </div>
-  </div>
-  <hr>
-
-  <div>
-    <button class="haveframe">
-      <img src="鼠标.png" alt="箭头" class="litlesize">
-    </button>
-    <button class="haveframe">
-      <img src="长方形.png" alt="长方形" class="litlesize">
-    </button>
-    <button class="haveframe">
-      <img src="椭圆形1.png" alt="长方形" class="litlesize">
-    </button>
-    <button class="haveframe">
-      <img src="直线.png" alt="长方形" class="litlesize">
-    </button>
-    <button class="haveframe">
-      <img src="任意多边形.png" alt="长方形" class="litlesize">
-    </button>
-    <button class="haveframe">
-      <img src="自由曲线.png" alt="长方形" class="litlesize">
-    </button>
-    <button class="haveframe">
-      <img src="brush.png" alt="长方形" class="litlesize">
-    </button>
-    <button class="haveframe">
-      <img src="撤回符号.png" alt="长方形" class="litlesize">
-    </button>
-    <button class="haveframe">
-      <img src="恢复.png" alt="长方形" class="litlesize">
-    </button>
-    <button class="haveframe">
-      <img src="tag.png" alt="长方形" class="litlesize">
-    </button>
-    <button class="haveframe">
-      <img src="color.png" alt="长方形" class="litlesize">
-    </button>
-  </div>
-  <hr>
-
-  <div class="folder-line">
-    <span> 文 件 夹</span>
-  </div>
-  <div class="dashed-box" id="dropZone">
-    <span class="plus-sign">+</span><br>
-    拖入图片
-  </div>
-  <div class="main-content" id="imageDisplayArea"></div>
-
-  <script>
-    // 获取拖放区域
-    const imageDisplayArea = document.querySelector('.main-content');
-
-    // 允许拖放事件
-    dropZone.addEventListener('dragover', (e) => {
-      e.preventDefault();
-    });
-
-    // 处理拖放事件
-    dropZone.addEventListener('drop', (e) => {
-      e.preventDefault();
-      const file = e.dataTransfer.files[0];
-      if (file && file.type.startsWith('image/')) {
-        const img = new Image();
-        img.src = URL.createObjectURL(file);
-        img.onload = () => {
-          imageDisplayArea.innerHTML = '';
-          imageDisplayArea.appendChild(img);
-        };
-      }
-    });
-  </script>
+  </header>
+  <main class="container bg-white p-3 rounded mb-3">
+    <h1>Login</h1>
+    <div style="max-width: 330px;" class="mx-auto">
+      <h1>Login</h1>
+      <form action="" method="post">
+        <div class="mb-3">
+          <label for="username" class="form-label">email box</label>
+          <input type="email" class="form-control" name="email" id="username" placeholder="Enter email" required>
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">password</label>
+          <input type="password" class="form-control" name="password" id="password" placeholder="Enter password"
+            required>
+        </div>
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" value="" id="flexCheckIndeterminate">
+          <label class="form-check-label" for="flexCheckIndeterminate">
+            remember me
+          </label>
+        </div>
+        <div class="mb-3 ">
+          <button type="submit" class="btn btn-primary w-100">Login recently</button>
+        </div>
+      </form>
+    </div>
+  </main>
 </body>
 
 </html>
