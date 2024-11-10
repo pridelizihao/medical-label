@@ -136,11 +136,38 @@
       /* 背景颜色 */
     }
 
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    /* 覆盖层，用于绘制长方形 */
+    .rectangle-overlay {
+      position: absolute;
+      border: 2px dashed red;
+      pointer-events: none;
+    }
+
+    #drawCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      /* 防止canvas覆盖图片的点击事件 */
+    }
+
     .soochow {
       top: 0;
       left: 100%;
       width: 6rem;
       height: auto;
+    }
+
+    /* 椭圆形绘制 */
+    .ellipse-overlay {
+      position: absolute;
+      border: 2px dashed blue;
+      pointer-events: none;
     }
   </style>
 </head>
@@ -168,13 +195,13 @@
     <button class="haveframe mouse-button">
       <img src="鼠标.png" alt="箭头" class="litlesize">
     </button>
-    <button class="haveframe oval-button">
+    <button class="haveframe oval-button chang-button">
       <img src="长方形.png " alt="长方形" class="litlesize">
     </button>
-    <button class="haveframe oval-button">
-      <img src="椭圆形1.png" alt="椭圆形" class="litlesize">
+    <button class="haveframe oval-button ellipse-button">
+      <img src="椭圆形1.png" alt="椭圆形" class="litlesize ">
     </button>
-    <button class="haveframe oval-button">
+    <button class="haveframe oval-button ">
       <img src="直线.png" alt="直线" class="litlesize">
     </button>
     <button class="haveframe oval-button">
@@ -184,7 +211,7 @@
       <img src="自由曲线.png" alt="自由曲线" class="litlesize">
     </button>
     <button class="haveframe brush-button">
-      <img src="brush.png" alt="长方形" class="litlesize">
+      <img src="brush.png" alt="刷子" class="litlesize">
     </button>
     <button class="haveframe">
       <img src="撤回符号.png" alt="撤回符号" class="litlesize">
@@ -212,8 +239,8 @@
   <div id="images-container"></div>
   <!-- 隐藏的文件输入元素 -->
   <input type="file" id="fileInput" multiple accept="image/*">
-
-
+  <!-- 绘制椭圆形 -->
+  <canvas id="drawCanvas"></canvas>
 
   <script>
     // 根据设备宽度计算html标签的font-size值
@@ -344,7 +371,115 @@
     tagButton.addEventListener('click', () => {
       document.body.style.cursor = 'url(标签图片.png), auto';
     });
+    let isDrawingRectangle = false;
+    let startXRectangle, startYRectangle, rectOverlayRectangle;
+    let currentImage;
 
+    // 长方形按钮点击事件
+    const rectButton = document.querySelector('.chang-button');
+    rectButton.addEventListener('click', () => {
+      document.body.style.cursor = 'crosshair';
+      isDrawingRectangle = true;
+    });
+
+    imagesContainer.addEventListener('mousedown', handleMouseDownRectangle);
+
+    function handleMouseDownRectangle(e) {
+      if (e.target.tagName === 'IMG' && isDrawingRectangle) {
+        startXRectangle = e.offsetX;
+        startYRectangle = e.offsetY;
+        rectOverlayRectangle = document.createElement('div');
+        rectOverlayRectangle.className = 'rectangle-overlay';
+        imagesContainer.appendChild(rectOverlayRectangle);
+        currentImage = e.target;
+        if (currentImage) {
+          currentImage.style.pointerEvents = 'none';
+        }
+        imagesContainer.addEventListener('mousemove', handleMouseMoveRectangle);
+        imagesContainer.addEventListener('mouseup', handleMouseUpRectangle);
+      }
+    }
+
+    function handleMouseMoveRectangle(e) {
+      if (!isDrawingRectangle) return;
+      const x = Math.min(startXRectangle, e.offsetX);
+      const y = Math.min(startYRectangle, e.offsetY);
+      const width = Math.abs(startXRectangle - e.offsetX);
+      const height = Math.abs(startYRectangle - e.offsetY);
+      rectOverlayRectangle.style.left = `${x}px`;
+      rectOverlayRectangle.style.top = `${y}px`;
+      rectOverlayRectangle.style.width = `${width}px`;
+      rectOverlayRectangle.style.height = `${height}px`;
+    }
+
+    function handleMouseUpRectangle() {
+      if (!isDrawingRectangle) return;
+      isDrawingRectangle = false;
+      imagesContainer.removeEventListener('mousemove', handleMouseMoveRectangle);
+      imagesContainer.removeEventListener('mouseup', handleMouseUpRectangle);
+      if (currentImage) {
+        currentImage.style.pointerEvents = 'auto';
+      }
+    }
+
+    // 获取 canvas 元素和绘图上下文
+    const canvas = document.getElementById('drawCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let isDrawingEllipse = false;
+    let startXEllipse, startYEllipse;
+    // 确保 canvas 大小与图片匹配
+    const img = imagesContainer.querySelector('img');
+    if (img) {
+      canvas.width = img.offsetWidth;
+      canvas.height = img.offsetHeight;
+    }
+
+    // 椭圆形按钮点击事件
+    const ellipseButton = document.querySelector('.ellipse-button');
+    ellipseButton.addEventListener('click', () => {
+      document.body.style.cursor = 'crosshair';
+      isDrawingEllipse = true;
+      canvas.style.pointerEvents = 'auto'; // 允许 canvas 上的鼠标事件
+    });
+
+    canvas.addEventListener('mousedown', handleMouseDownEllipse);
+    canvas.addEventListener('mousemove', handleMouseMoveEllipse);
+    canvas.addEventListener('mouseup', handleMouseUpEllipse);
+
+    function handleMouseDownEllipse(e) {
+      if (!isDrawingEllipse) return;
+      startXEllipse = e.offsetX;
+      startYEllipse = e.offsetY;
+    }
+
+    function handleMouseMoveEllipse(e) {
+      if (!isDrawingEllipse) return;
+      if (!startXEllipse || !startYEllipse) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height); // 清除之前的椭圆
+      drawEllipse(startXEllipse, startYEllipse, e.offsetX, e.offsetY);
+    }
+
+    function handleMouseUpEllipse() {
+      if (!isDrawingEllipse) return;
+      isDrawingEllipse = false;
+      canvas.style.pointerEvents = 'none'; // 绘制结束后禁止 canvas 上的鼠标事件
+      canvas.removeEventListener('mousedown', handleMouseDownEllipse);
+      canvas.removeEventListener('mousemove', handleMouseMoveEllipse);
+      canvas.removeEventListener('mouseup', handleMouseUpEllipse);
+    }
+
+    function drawEllipse(x1, y1, x2, y2) {
+      const cx = (x1 + x2) / 2;
+      const cy = (y1 + y2) / 2;
+      const rx = Math.abs(x2 - x1) / 2;
+      const ry = Math.abs(y2 - y1) / 2;
+      ctx.beginPath();
+      ctx.ellipse(cx, cy, rx, ry, 0, 0, 2 * Math.PI);
+      ctx.strokeStyle = 'blue';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
   </script>
 </body>
 
