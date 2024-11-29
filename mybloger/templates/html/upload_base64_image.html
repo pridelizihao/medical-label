@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>上传Base64图片</title>
+</head>
+<body>
+    <h2>测试上传</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">上传</button>
+    </form>
+</body>
+</html>

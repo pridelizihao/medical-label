@@ -1,0 +1,44 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "name": "Python: Current File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "创建App",
+            "type": "debugpy",
+            "request": "launch",
+            "args": [
+                "startapp",
+                "${input:app_name}"
+            ],
+            "django": true,
+            "autoStartBrowser": false,
+            "program": "${workspaceFolder}\\mybloger\\manage.py"
+        },
+        {
+            "name": "Python 调试程序: Django",
+            "type": "debugpy",
+            "request": "launch",
+            "args": [
+                "runserver"
+            ],
+            "django": true,
+            "autoStartBrowser": false,
+            "program": "${workspaceFolder}\\mybloger\\manage.py"
+        }
+    ],
+    "inputs": [
+        {
+            "id": "app_name",
+            "type": "promptString",
+            "description": "输入app名称"
+        }
+    ]
+
+}   

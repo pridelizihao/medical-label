@@ -1,0 +1,171 @@
+{% extends 'html/base.html' %}
+{% block title %} bloger {% endblock %}
+
+{% block head %}
+
+
+{% endblock %}
+
+{% block main %}
+<div class="container">
+  <h1>欢迎来到[平台名称]!</h1>
+  
+  <div class="introduction">
+      <h2>平台介绍</h2>
+      <p>
+          [平台名称]是一个综合性的在线服务平台，我们致力于为用户提供一站式、全方位的服务体验。
+      </p>
+      <p>
+          在这里，您可以享受到以下服务：
+      </p>
+      <ul>
+          <li>
+              <strong>服务一：</strong> 详细描述服务一的内容、特点和优势。
+          </li>
+          <li>
+              <strong>服务二：</strong> 详细描述服务二的内容、特点和优势。请确保信息准确、清晰，以便用户快速了解。
+          </li>
+          <li>
+              <strong>服务三：</strong> 详细描述服务三的内容、特点和优势。可以包括服务的适用范围、使用方法等。
+          </li>
+          <!-- 根据需要添加更多服务 -->
+      </ul>
+      <p>
+          我们的平台拥有专业的客服团队和技术支持，确保您在使用过程中遇到的问题能够得到及时解决。同时，我们也非常重视用户的反馈和建议，欢迎随时与我们联系，共同改进和提升平台的服务质量。
+      </p>
+      <p>
+          感谢您选择[平台名称]，我们将竭诚为您服务！
+      </p>
+  </div>
+  
+  <!-- 你可以在这里添加更多的内容或功能区域，如用户登录、注册、帮助中心等 -->
+
+</div>
+
+<div class="footer" type="text/html" style="background-color: #f5f5f5;padding: 10px;margin-top: 20px;">
+  <p>&copy; 2024 [平台名称]. 保留所有权利.</p>
+</div>
+<!-- <h1>bloger list</h1>
+  <div class="row row-cols-2 row-gap-3 mb-3">
+  <div class="col">
+    <div class="card">
+      <div class="card-header">
+        <ul class="nav nav-pills card-header-pills">
+          <li class="nav-item">
+            <a class="nav-link active" href="#">django教程</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Link</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+          </li>
+        </ul>
+      </div>
+      <div class="card-body" style="height: 120px">
+        <h5 class="card-title">Special title treatment</h5>
+        <p class="card-text">
+          With supporting text below as a natural lead-in to additional content.
+        </p>
+      </div>
+      <div class="card-footer text-body-secondary d-flex justify-content-between">
+        <div>
+          <img src="{% static 'image/avatar.webp' %}" class="rounded-circle" width="30" height="30" alt="" />
+          pridelzh
+        </div>
+        <div>发布时间: 2024-11-02 12:00:00</div>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="card-header">
+        <ul class="nav nav-pills card-header-pills">
+          <li class="nav-item">
+            <a class="nav-link active" href="#">django教程</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Link</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+          </li>
+        </ul>
+      </div>
+      <div class="card-body" style="height: 120px">
+        <h5 class="card-title">Special title treatment</h5>
+        <p class="card-text">
+          With supporting text below as a natural lead-in to additional content.
+        </p>
+      </div>
+      <div class="card-footer text-body-secondary d-flex justify-content-between">
+        <div>
+          <img src="{% static 'image/avatar.webp' %}" class="rounded-circle" width="30" height="30" alt="" />
+          pridelzh
+        </div>
+        <div>发布时间: 2024-11-02 12:00:00</div>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="card-header">
+        <ul class="nav nav-pills card-header-pills">
+          <li class="nav-item">
+            <a class="nav-link active" href="#">django教程</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Link</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+          </li>
+        </ul>
+      </div>
+      <div class="card-body" style="height: 120px">
+        <h5 class="card-title">Special title treatment</h5>
+        <p class="card-text">
+          With supporting text below as a natural lead-in to additional content.
+        </p>
+      </div>
+      <div class="card-footer text-body-secondary d-flex justify-content-between">
+        <div>
+          <img src="{% static 'image/avatar.webp' %}" class="rounded-circle" width="30" height="30" alt="" />
+          pridelzh
+        </div>
+        <div>发布时间: 2024-11-02 12:00:00</div>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="card-header">
+        <ul class="nav nav-pills card-header-pills">
+          <li class="nav-item">
+            <a class="nav-link active" href="#">django教程</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Link</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+          </li>
+        </ul>
+      </div>
+      <div class="card-body" style="height: 120px">
+        <h5 class="card-title">Special title treatment</h5>
+        <p class="card-text">
+          With supporting text below as a natural lead-in to additional content.
+        </p>
+      </div>
+      <div class="card-footer text-body-secondary d-flex justify-content-between">
+        <div>
+          <img src="{% static 'image/avatar.webp' %}" class="rounded-circle" width="30" height="30" alt="" />
+          pridelzh
+        </div>
+        <div>发布时间: 2024-11-02 12:00:00</div>
+      </div>
+    </div>
+  </div>
+  </div> -->
+{% endblock %}

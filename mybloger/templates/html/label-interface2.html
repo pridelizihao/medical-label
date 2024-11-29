@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0,user-scalable=yes">
+  <!-- 通过CDN引入Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <meta name="description" content="医学标注平台，自动化标注和图片标注">
+  <title>医学标注平台</title>
+  <style>
+    .button-container {
+      display: flex;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      /* 使用相对定位，以便子元素可以根据此容器进行定位 */
+      position: relative;
+    }
+
+    .not-frame {
+      flex: 1;
+      height: 5rem;
+      font-size: 14px;
+      margin: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 5rem;
+      background-color: rgb(232, 31, 31);
+    }
+
+    .litlesize {
+      height: 4rem;
+      width: 3rem;
+    }
+
+
+
+    .haveframe {
+      /* 按钮在弹性容器中占据剩余空间 */
+      height: 5rem;
+      width: 5rem;
+      font-size: 16px;
+      background-color: white;
+    }
+
+    /* 文件夹文字后有一竖线 */
+    .folder-line {
+      position: relative;
+      display: inline-block;
+      align-items: flex-start;
+    }
+
+    .folder-line span {
+      margin-right: 5rem;
+      /* 让文件夹和竖线之间有间隙 */
+    }
+
+    .folder-line::after {
+      content: "";
+      width: 1px;
+      height: 100vh;
+      background-color: black;
+      position: absolute;
+      top: -5px;
+      /* 向上调整一点，与上方文字更紧密 */
+      left: 100%;
+    }
+
+    /* 拖入图片的长方形框架 */
+    .dashed-box {
+      border: 2px dashed black;
+      width: 60rem;
+      height: 50rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: 40%;
+      left: calc(35% + 10px);
+      /* 调整这个值来控制与竖线的间距 */
+    }
+
+    /* 拖入图片 */
+    .plus-sign {
+      font-size: 10rem;
+      font-weight: 50;
+    }
+
+    /* 文件按钮点击后显示按钮 */
+    .file-options {
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      padding: 10px;
+      position: absolute;
+      top: 100px;
+      left: 0;
+      display: none;
+    }
+
+    /* 自动标注按钮点击后显示按钮 */
+    .auto-options {
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      padding: 10px;
+      position: absolute;
+      top: 100px;
+      left: 25%;
+      display: none;
+    }
+
+    .transfer-options {
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      padding: 10px;
+      position: absolute;
+      top: 100px;
+      left: 37%;
+      display: none;
+    }
+
+    #fileInput {
+      display: none;
+    }
+
+    #images-container {
+      position: absolute;
+      top: 15rem;
+      left: 10%;
+      /* 竖线的位置 */
+      width: 90rem;
+      /* 根据需要调整宽度 */
+      height: 90vh;
+      /* 根据需要调整高度 */
+      overflow: auto;
+      /* 如果内容超出高度，显示滚动条 */
+      background-color: #f0f0f0;
+      /* 背景颜色 */
+    }
+
+    img {
+      max-width: 100%;
+      /* 图片宽度自适应 */
+      display: block
+        /* 图片宽度自适应 */
+    }
+
+    .soochow {
+      top: 0;
+      left: 80%;
+      width: 10rem;
+      height: auto;
+      position: absolute;
+      /* 调整位置 */
+      z-index: 1;
+    }
+
+    /* 在你的CSS文件或<style>标签中 */
+    .button-left-margin {
+      margin-left: 20px;
+    }
+
+    #drawCanvas {
+    width: 800px; /* 或者你想要的宽度 */
+    height: 600px; /* 或者你想要的高度 */
+    border: 1px solid white;
+  }
+
+    .ellipse-overlay {
+      position: absolute;
+      border: 2px dashed blue;
+      pointer-events: none;
+    }
+
+    /* 覆盖层，用于绘制长方形 */
+    .rectangle-overlay {
+      position: absolute;
+      border: 2px dashed red;
+      pointer-events: none;
+    }
+
+    /* 覆盖层，用于绘制椭圆 */
+    .ellipse-overlay {
+      position: absolute;
+      border: 2px dashed blue;
+      pointer-events: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="button-container" style="display:flex;justify-content:flex-start;">
+    <!-- <div style="display:flex;">
+      <button class="not-frame file-button">文件</button>
+      <button class="not-frame">工具</button>
+      <button class="not-frame auto-button">自动标注</button>
+      <button class="not-frame transfer-button">云端</button>
+      <button class="not-frame">编辑</button>
+      <button class="not-frame">窗口</button>
+      <button class="not-frame">关闭</button>
+      <button class="not-frame">帮助</button>
+      <button class="not-frame">视图</button>
+      <button class="not-frame">测量</button>
+    </div> -->
+    <div>
+      <button type="button" style="margin-top:20px;" class="btn btn-danger file-button">文件</button>
+      <button type="button" style="margin-top:20px;" class="btn btn-danger">工具</button>
+      <button type="button" style="margin-top:20px;" class="btn btn-danger auto-button">自动标注</button>
+      <button type="button" style="margin-top:20px;" class="btn btn-danger transfer-button">云端</button>
+      <button type="button" style="margin-top:20px;" class="btn btn-danger">编辑</button>
+      <button type="button" style="margin-top:20px;" class="btn btn-danger">窗口</button>
+      <button type="button" style="margin-top:20px;" class="btn btn-danger">关闭</button>
+      <button type="button" style="margin-top:20px;" class="btn btn-danger">帮助</button>
+      <button type="button" style="margin-top:20px;" class="btn btn-danger">视图</button>
+      <button type="button" style="margin-top:20px;" class="btn btn-danger">测量</button>
+    </div>
+    <img src="{% static 'images/mylogo.png' %}" alt="soochow university" class="soochow">
+  </div>
+
+  <hr>
+
+  <div>
+    <button class="haveframe mouse-button">
+      <img src="{% static 'images/鼠标.png' %}" alt="箭头" class="litlesize">
+    </button>
+    <button class="haveframe oval-button chang-button">
+      <img src="{% static 'images/长方形.png'%} " alt="长方形" class="litlesize">
+    </button>
+    <button class="haveframe oval-button eillipse-button">
+      <img src="{% static 'images/椭圆形1.png' %}" alt="椭圆形" class="litlesize">
+    </button>
+    <button class="haveframe oval-button">
+      <img src="{% static 'images/直线.png' %}" alt="直线" class="litlesize">
+    </button>
+    <button class="haveframe oval-button">
+      <img src="{% static 'images/任意多边形.png' %}" alt="任意多边形" class="litlesize">
+    </button>
+    <button class="haveframe oval-button">
+      <img src="{% static 'images/自由曲线.png' %}" alt="自由曲线" class="litlesize">
+    </button>
+    <button class="haveframe brush-button">
+      <img src="{% static 'images/brush.png' %}" alt="长方形" class="litlesize">
+    </button>
+    <button class="haveframe">
+      <img src="{% static 'images/撤回符号.png' %}" alt="撤回符号" class="litlesize">
+    </button>
+    <button class="haveframe">
+      <img src="{% static 'images/恢复.png' %}" alt="恢复符号" class="litlesize">
+    </button>
+    <button class="haveframe tag-button">
+      <img src="{% static 'images/tag.png' %}" alt="标签" class="litlesize">
+    </button>
+    <button class="haveframe">
+      <img src="{% static 'images/color.png' %}" alt="颜色" class="litlesize">
+    </button>
+  </div>
+  <hr>
+
+  <div class="folder-line">
+    <span> 文 件 夹</span>
+  </div>
+  <div class="dashed-box" id="dropZone">
+    <span class="plus-sign">+</span><br>
+    拖入图片
+  </div>
+  <!-- 图片显示区域 -->
+  <div id="images-container"></div>
+  <!-- 隐藏的文件输入元素 -->
+  <input type="file" id="fileInput" multiple accept="image/*">
+
+  <canvas id="drawCanvas"></canvas>
+
+  <script>
+    // 根据设备宽度计算html标签的font-size值
+    function resetHtmlFontsize() {
+      document.documentElement.style.fontSizes = screen.width / 10 + 'px'
+    }
+    resetHtmlFontsize()
+    window.onresize = resetHtmlFontsize;
+    // 文件按钮点击后显示新建打开保存另存为的选项
+    const fileButton = document.querySelector('.file-button');
+    const fileOptions = document.createElement('div');
+    fileOptions.classList.add('file-options');
+    fileOptions.innerHTML = `
+      <button>新建</button>
+      <br>
+     <button class="open-button">打开</button>
+      <br>
+      <button class="save-button">保存</button>
+      <br>
+      <button class="save-as-button">另存为</button>
+      <br>
+    `;
+    fileOptions.style.display = 'none';
+    fileOptions.style.display = 'none'; // 确保这个样式被设置
+    fileOptions.style.position = 'absolute'; // 设置为绝对定位
+    fileOptions.style.left = '0px'; // 设置左边距
+    fileOptions.style.top = '80px'; // 设置上边距
+
+    // 将选项容器添加到 body 中
+    document.body.appendChild(fileOptions);
+
+    // 点击文件按钮显示或隐藏选项
+    fileButton.addEventListener('click', () => {
+      if (fileOptions.style.display === 'none') {
+        fileOptions.style.display = 'block';
+      } else {
+        fileOptions.style.display = 'none';
+      }
+    });
+    // 打开按钮点击事件
+    const openButton = document.querySelector('.open-button');
+    openButton.addEventListener('click', () => {
+      const fileInput = document.getElementById('fileInput');
+      fileInput.click(); // 触发文件选择
+    });
+
+    //文件选择输入框的change事件
+    const fileInput = document.getElementById('fileInput');
+    const imagesContainer = document.getElementById('images-container');
+    fileInput.addEventListener('change', function (event) {
+      const files = event.target.files;
+      imagesContainer.innerHTML = ''; // 清空之前的图片
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (file.type.startsWith('image/')) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            const imgElement = document.createElement('img');
+            imgElement.src = e.target.result;
+            imgElement.style.maxWidth = '100%';
+            imgElement.style.maxHeight = '100%';
+            imagesContainer.appendChild(imgElement);
+          };
+          reader.readAsDataURL(file);
+        }
+      }
+    });
+
+    
+
+
+    // // 保存带有标注的图片的函数
+    // function saveAnnotatedImage() {
+    //   // 获取 canvas 元素和绘图上下文
+    //   const canvas = document.getElementById('drawCanvas');
+    //   const ctx = canvas.get/ Context('2d');
+
+    //   // 确保 canvas 大小与图片匹配
+    //   const img = imagesContainer.querySelector('img');
+    //   if (img) {
+    //     canvas.width = img.offsetWidth;
+    //     canvas.height = img.offsetHeight;
+    //     // 将图片绘制到 canvas 上
+    //     ctx.drawImage(img, 0, 0, img.offsetWidth, img.offsetHeight);
+    //   }
+
+    //   // 遍历所有的矩形标注并绘制到 canvas 上
+    //   const rectangles = document.querySelectorAll('.rectangle-overlay');
+    //   rectangles.forEach(rect => {
+    //     ctx.strokeStyle = window.getComputedStyle(rect).borderColor;
+    //     ctx.lineWidth = parseInt(window.getComputedStyle(rect).borderWidth);
+    //     ctx.strokeRect(rect.offsetLeft, rect.offsetTop, rect.offsetWidth, rect.offsetHeight);
+    //   });
+
+    //   // 将 canvas 转换为 PNG 图片的数据 URL
+    //   const dataURL = canvas.toDataURL('image/png');
+    //   // 创建一个下载链接
+    //   const link = document.createElement('a');
+    //   // 设置链接的 href 为数据 URL
+    //   link.href = dataURL;  
+    //   // 设置下载的文件名
+    //   link.download = 'annotated-image.png';
+    //   // 模拟点击链接以触发下载
+    //   link.click();
+    // }
+
+    // 获取保存按钮元素，并为其添加点击事件监听器
+    const saveButton = document.querySelector('.save-button');
+    saveButton.addEventListener('click', saveAnnotatedImage);
+    保存带有标注的图片的函数
+  function saveAnnotatedImage() {
+    // 获取 canvas 元素
+    const canvas = document.getElementById('drawCanvas');
+
+    // 将 canvas 转换为 PNG 图片的数据 URL
+    const dataURL = canvas.toDataURL('image/png');
+
+    // 创建一个下载链接
+    const link = document.createElement('a');
+    // 设置链接的 href 为数据 URL
+    link.href = dataURL;
+    // 设置下载的文件名
+    link.download = 'annotated-image.png';
+    // 将链接添加到文档中
+    document.body.appendChild(link);
+    // 模拟点击链接以触发下载
+    link.click();
+    // 从文档中移除链接
+    document.body.removeChild(link);
+  }
+
+  // 获取保存按钮元素，并为其添加点击事件监听器
+
+  saveButton.addEventListener('click', saveAnnotatedImage);
+
+    
+
+    //另存为
+    function saveAsImages() {
+      const images = document.querySelectorAll('#images-container img');
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+
+      let totalWidth = 0;
+      let maxHeight = 0;
+
+      // 计算总宽度和最大高度
+      images.forEach((img, index) => {
+        const imgWidth = img.width;
+        const imgHeight = img.height;
+        maxHeight = Math.max(maxHeight, imgHeight);
+        if (index === 0) {
+          totalWidth += imgWidth;
+        } else {
+          totalWidth += imgWidth + 10; // 假设每张图片之间有10px的间隔
+        }
+      });
+
+      canvas.width = totalWidth;
+      canvas.height = maxHeight;
+
+      // 将图片绘制到canvas上
+      let currentX = 0;
+      images.forEach((img, index) => {
+        const imgWidth = img.width;
+        const imgHeight = img.height;
+        ctx.drawImage(img, currentX, 0, imgWidth, imgHeight);
+        if (index === 0) {
+          currentX += imgWidth;
+        } else {
+          currentX += imgWidth + 10; // 假设每张图片之间有10px的间隔
+        }
+      });
+
+      // 将canvas转换为Blob对象
+      canvas.toBlob((blob) => {
+        // 使用FileSaver.js保存图片
+        const filename = prompt("请输入文件名：", "image.png"); // 允许用户输入文件名
+        if (filename) {
+          saveAs(blob, filename);
+        }
+      }, 'image/png');
+    }
+
+    // 点击另存为按钮显示另存为的选项
+    const saveAsButton = document.querySelector('.save-as-button');
+    saveAsButton.addEventListener('click', saveAsImages);
+
+
+    // 自动标注按钮点击后显示标注病变部位，标注健康部位的按钮
+    const autoButton = document.querySelector('.auto-button');
+    const autoOptions = document.createElement('div');
+    autoOptions.classList.add('auto-options');
+    autoOptions.innerHTML = `
+      <button ">标注健康部位</button>
+      <br>
+      <button ">标注病变部位</button>
+      <br>
+      `;
+    ;
+    autoOptions.style.display = 'none';
+    autoOptions.style.display = 'none'; // 确保这个样式被设置
+    autoOptions.style.position = 'absolute'; // 设置为绝对定位
+    autoOptions.style.left = '100px'; // 设置左边距
+    autoOptions.style.top = '80px'; // 设置上边距
+
+    // 将选项容器添加到 body 中
+    document.body.appendChild(autoOptions);
+
+    // 点击自动标注按钮按钮显示或隐藏选项
+    autoButton.addEventListener('click', () => {
+      if (autoOptions.style.display === 'none') {
+        autoOptions.style.display = 'block';
+      } else {
+        autoOptions.style.display = 'none';
+      }
+    });
+    // 云端按钮点击后显示的按钮
+    const transferButton = document.querySelector('.transfer-button');
+    const transferOptions = document.createElement('div');
+    transferOptions.classList.add('transfer-options');
+    transferOptions.innerHTML = `
+      <button>接收文件</button>
+      <br>
+      <button>上传文件</button>
+      <br>
+      <button>传输文件给</button>
+    `;
+
+    transferOptions.style.display = 'none';
+    transferOptions.style.display = 'none'; // 确保这个样式被设置
+    transferOptions.style.position = 'absolute'; // 设置为绝对定位
+    transferOptions.style.left = '240px'; // 设置左边距
+    transferOptions.style.top = '80px'; // 设置上边距
+
+    // 将选项容器添加到 body 中
+    document.body.appendChild(transferOptions);
+
+    // 点击自动标注按钮按钮显示或隐藏选项
+    transferButton.addEventListener('click', () => {
+      if (transferOptions.style.display === 'none') {
+        transferOptions.style.display = 'block';
+      } else {
+        transferOptions.style.display = 'none';
+      }
+    });
+    // 点击图形按钮鼠标样式为十字准线
+    const ovalButtons = document.querySelectorAll('.oval-button');
+    ovalButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        document.body.style.cursor = 'crosshair';
+      });
+    });
+    // 点击刷子按钮改变鼠标样式为刷子
+    const brushButton = document.querySelector('.brush-button');
+    brushButton.addEventListener('click', () => {
+      document.body.style.cursor = 'url(brush.png), auto';
+    });
+
+    // 点击鼠标按钮恢复鼠标默认样式
+    const mouseButton = document.querySelector('.mouse-button');
+    mouseButton.addEventListener('click', () => {
+      document.body.style.cursor = 'default';
+    });
+    // 点击tag按钮鼠标样式为标签图形
+    const tagButton = document.querySelector('.tag-button');
+    tagButton.addEventListener('click', () => {
+      document.body.style.cursor = 'url(标签图片.png), auto';
+    });
+
+
+    // let isDrawingRectangle = false;
+    // let startXRectangle, startYRectangle;
+
+    // const rectButton = document.querySelector('.chang-button');
+    // rectButton.addEventListener('click', () => {
+    //   document.body.style.cursor = 'crosshair';
+    //   isDrawingRectangle = true;
+    // });
+
+    // canvas.addEventListener('mousedown', handleMouseDownRectangle);
+    // canvas.addEventListener('mousemove', handleMouseMoveRectangle);
+    // canvas.addEventListener('mouseup', handleMouseUpRectangle);
+
+    // function handleMouseDownRectangle(e) {
+    //     if (isDrawingRectangle) {
+    //         startXRectangle = e.offsetX;
+    //         startYRectangle = e.offsetY;
+    //         ctx.beginPath();
+    //         ctx.moveTo(startXRectangle, startYRectangle);
+    //     }
+    // }
+
+    // function handleMouseMoveRectangle(e) {
+    //     if (!isDrawingRectangle) return;
+
+    //     // 清空画布
+    //     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    //     // 绘制背景图片
+    //     const img = document.getElementById('sourceImage');
+    //     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+    //     // 绘制矩形
+    //     const x = e.offsetX;
+    //     const y = e.offsetY;
+    //     ctx.strokeStyle = 'red'; // 矩形边框颜色
+    //     ctx.lineWidth = 2; // 矩形边框宽度
+    //     ctx.strokeRect(startXRectangle, startYRectangle, x - startXRectangle, y - startYRectangle);
+    // }
+
+    // function handleMouseUpRectangle() {
+    //     if (!isDrawingRectangle) return;
+    //     isDrawingRectangle = false;
+    //      ctx.closePath();
+    // }
+
+    // // 确保 canvas 大小与图片匹配
+    // const img = document.getElementById('sourceImage');
+    // if (img) {
+    //     canvas.width = img.offsetWidth;
+    //     canvas.height = img.offsetHeight;
+    // }
+
+  // //矩形按钮点击事件
+  // const rectButton = document.querySelector('.chang-button');
+  //   rectButton.addEventListener('click', () => {
+  //     document.body.style.cursor = 'crosshair';
+  //     isDrawingRectangle = true;
+  //   });
+
+  //   imagesContainer.addEventListener('mousedown', handleMouseDownRectangle);
+
+  //   function handleMouseDownRectangle(e) {
+  //     if (e.target.tagName === 'IMG' && isDrawingRectangle) {
+  //       startXRectangle = e.offsetX;
+  //       startYRectangle = e.offsetY;
+  //       rectOverlayRectangle = document.createElement('div');
+  //       rectOverlayRectangle.className = 'rectangle-overlay';
+  //       imagesContainer.appendChild(rectOverlayRectangle);
+  //       currentImage = e.target;
+  //       if (currentImage) {
+  //         currentImage.style.pointerEvents = 'none';
+  //       }
+  //       imagesContainer.addEventListener('mousemove', handleMouseMoveRectangle);
+  //       imagesContainer.addEventListener('mouseup', handleMouseUpRectangle);
+  //     }
+  //   }
+
+  //   function handleMouseMoveRectangle(e) {
+  //     if (!isDrawingRectangle) return;
+  //     const x = Math.min(startXRectangle, e.offsetX);
+  //     const y = Math.min(startYRectangle, e.offsetY);
+  //     const width = Math.abs(startXRectangle - e.offsetX);
+  //     const height = Math.abs(startYRectangle - e.offsetY);
+  //     rectOverlayRectangle.style.left = `${x}px`;
+  //     rectOverlayRectangle.style.top = `${y}px`;
+  //     rectOverlayRectangle.style.width = `${width}px`;
+  //     rectOverlayRectangle.style.height = `${height}px`;
+  //   }
+
+  //   function handleMouseUpRectangle() {
+  //     if (!isDrawingRectangle) return;
+  //     isDrawingRectangle = false;
+  //     imagesContainer.removeEventListener('mousemove', handleMouseMoveRectangle);
+  //     imagesContainer.removeEventListener('mouseup', handleMouseUpRectangle);
+  //     if (currentImage) {
+  //       currentImage.style.pointerEvents = 'auto';
+  //     }
+  //   }
+
+  //   // 获取 canvas 元素和绘图上下文
+  //   const canvas = document.getElementById('drawCanvas');
+  //   const ctx = canvas.getContext('2d');
+
+  //   let isDrawingEllipse = false;
+  //   let startXEllipse, startYEllipse;
+  //   // 确保 canvas 大小与图片匹配
+  //   const img = imagesContainer.querySelector('img');
+  //   if (img) {
+  //     canvas.width = img.offsetWidth;
+  //     canvas.height = img.offsetHeight;
+  //   }
+
+
+    // //矩形按钮点击事件
+    // const rectButton = document.querySelector('.chang-button');
+    // rectButton.addEventListener('click', () => {
+    //   document.body.style.cursor = 'crosshair';
+    //   isDrawingRectangle = true;
+    // });
+
+    // imagesContainer.addEventListener('mousedown', handleMouseDownRectangle);
+
+    // function handleMouseDownRectangle(e) {
+    //   if (e.target.tagName === 'IMG' && isDrawingRectangle) {
+    //     startXRectangle = e.offsetX;
+    //     startYRectangle = e.offsetY;
+    //     rectOverlayRectangle = document.createElement('div');
+    //     rectOverlayRectangle.className = 'rectangle-overlay';
+    //     imagesContainer.appendChild(rectOverlayRectangle);
+    //     currentImage = e.target;
+    //     if (currentImage) {
+    //       currentImage.style.pointerEvents = 'none';
+    //     }
+    //     imagesContainer.addEventListener('mousemove', handleMouseMoveRectangle);
+    //     imagesContainer.addEventListener('mouseup', handleMouseUpRectangle);
+    //   }
+    // }
+
+    // function handleMouseMoveRectangle(e) {
+    //   if (!isDrawingRectangle) return;
+    //   const x = Math.min(startXRectangle, e.offsetX);
+    //   const y = Math.min(startYRectangle, e.offsetY);
+    //   const width = Math.abs(startXRectangle - e.offsetX);
+    //   const height = Math.abs(startYRectangle - e.offsetY);
+    //   rectOverlayRectangle.style.left = `${x}px`;
+    //   rectOverlayRectangle.style.top = `${y}px`;
+    //   rectOverlayRectangle.style.width = `${width}px`;
+    //   rectOverlayRectangle.style.height = `${height}px`;
+    // }
+
+    // function handleMouseUpRectangle() {
+    //   if (!isDrawingRectangle) return;
+    //   isDrawingRectangle = false;
+    //   imagesContainer.removeEventListener('mousemove', handleMouseMoveRectangle);
+    //   imagesContainer.removeEventListener('mouseup', handleMouseUpRectangle);
+    //   if (currentImage) {
+    //     currentImage.style.pointerEvents = 'auto';
+    //   }
+    // }
+
+    // // 获取 canvas 元素和绘图上下文
+    // const canvas = document.getElementById('drawCanvas');
+    // const ctx = canvas.getContext('2d');
+
+    // let isDrawingEllipse = false;
+    // let startXEllipse, startYEllipse;
+    // // 确保 canvas 大小与图片匹配
+    // const img = imagesContainer.querySelector('img');
+    // if (img) {
+    //   canvas.width = img.offsetWidth;
+    //   canvas.height = img.offsetHeight;
+    // }
+
+    
+    // // 点击椭圆按钮鼠标样式为椭圆
+    // const ellipseButton = document.querySelector('.ellipse-button');
+    // ellipseButton.addEventListener('click', () => {
+    //   document.body.style.cursor = 'crosshair';
+    //   isDrawingEllipse = true;
+    // });
+
+    // imagesContainer.addEventListener('mousedown', handleMouseDownEllipse);
+
+    // function handleMouseDownEllipse(e) {
+    //   if (e.target.tagName === 'IMG' && isDrawingEllipse) {
+    //     startXEllipse = e.offsetX;
+    //     startYEllipse = e.offsetY;
+    //     ellipseOverlayEllipse = document.createElement('div');
+    //     ellipseOverlayEllipse.className = 'ellipse-overlay';
+    //     imagesContainer.appendChild(ellipseOverlayEllipse);
+    //     currentImage = e.target;
+    //     if (currentImage) {
+    //       currentImage.style.pointerEvents = 'none';
+    //     }
+    //     imagesContainer.addEventListener('mousemove', handleMouseMoveEllipse);
+    //     imagesContainer.addEventListener('mouseup', handleMouseUpEllipse);
+    //   }
+    // }
+
+    // function handleMouseMoveEllipse(e) {
+    //   if (!isDrawingEllipse) return;
+    //   const x = Math.min(startXEllipse, e.offsetX);
+    //   const y = Math.min(startYEllipse, e.offsetY);
+    //   const width = Math.abs(startXEllipse - e.offsetX);
+    //   const height = Math.abs(startYEllipse - e.offsetY);
+    //   ellipseOverlayEllipse.style.left = `${x}px`;
+    //   ellipseOverlayEllipse.style.top = `${y}px`;
+    //   ellipseOverlayEllipse.style.width = `${width}px`;
+    //   ellipseOverlayEllipse.style.height = `${height}px`;
+    // }
+
+    // function handleMouseUpEllipse() {
+    //   if (!isDrawingEllipse) return;
+    //   isDrawingEllipse = false;
+    //   imagesContainer.removeEventListener('mousemove', handleMouseMoveEllipse);
+    //   imagesContainer.removeEventListener('mouseup', handleMouseUpEllipse);
+    //   if (currentImage) {
+    //     currentImage.style.pointerEvents = 'auto';
+    //   }
+    // }
+
+    // // 点击直线按钮鼠标样式为直线
+    // const lineButton = document.querySelector('.line-button');
+    // lineButton.addEventListener('click', () => {
+    //   document.body.style.cursor = 'crosshair';
+    //   isDrawingLine = true;
+    // });
+
+    // imagesContainer.addEventListener('mousedown', handleMouseDownLine);
+
+    // function handleMouseDownLine(e) {
+    //   if (e.target.tagName === 'IMG' && isDrawingLine) {
+    //     startXLine = e.offsetX;
+    //     startYLine = e.offsetY;
+    //     lineOverlayLine = document.createElement('div');
+    //     lineOverlayLine.className = 'line-overlay';
+    //     imagesContainer.appendChild(lineOverlayLine);
+    //     currentImage = e.target;
+    //     if (currentImage) {
+    //       currentImage.style.pointerEvents = 'none';
+    //     }
+    //     imagesContainer.addEventListener('mousemove', handleMouseMoveLine);
+    //     imagesContainer.addEventListener('mouseup', handleMouseUpLine);
+    //   }
+    // }
+
+    // function handleMouseMoveLine(e) {
+    //   if (!isDrawingLine) return;
+    //   const x = Math.min(startXLine, e.offsetX);
+    //   const y = Math.min(startYLine, e.offsetY);
+    //   const width = Math.abs(startXLine - e.offsetX);
+    //   const height = Math.abs(startYLine - e.offsetY);
+    //   lineOverlayLine.style.left = `${x}px`;
+    //   lineOverlayLine.style.top = `${y}px`;
+    //   lineOverlayLine.style.width = `${width}px`;
+    //   lineOverlayLine.style.height = `${height}px`;
+    // }
+
+    // function handleMouseUpLine() {
+    //   if (!isDrawingLine) return;
+    //   isDrawingLine = false;
+    //   imagesContainer.removeEventListener('mousemove', handleMouseMoveLine);
+    //   imagesContainer.removeEventListener('mouseup', handleMouseUpLine);
+    //   if (currentImage) {
+    //     currentImage.style.pointerEvents = 'auto';
+    //   }
+    // }
+
+    // // 点击矩形按钮鼠标样式为矩形
+    // const rectangleButton = document.querySelector('.rectangle-button');
+    // rectangleButton.addEventListener('click', () => {
+    //   document.body.style.cursor = 'crosshair';
+    //   isDrawingRectangle = true;
+    // });
+
+    // imagesContainer.addEventListener('mousedown', handleMouseDownRectangle);
+
+    // function handleMouseDownRectangle(e) {
+    //   if (e.target.tagName === 'IMG' && isDrawingRectangle) {
+    //     startXRectangle = e.offsetX;
+    //     startYRectangle = e.offsetY;
+    //     rectangleOverlayRectangle = document.createElement('div');
+    //     rectangleOverlayRectangle.className = 'rectangle-overlay';
+    //     imagesContainer.appendChild(rectangleOverlayRectangle);
+    //     currentImage = e.target;
+    //     if (currentImage) {
+    //       currentImage.style.pointerEvents = 'none';
+    //     }
+    //     imagesContainer.addEventListener('mousemove', handleMouseMoveRectangle);
+    //     imagesContainer.addEventListener('mouseup', handleMouseUpRectangle);
+    //   }
+    // }
+
+    // function handleMouseMoveRectangle(e) {
+    //   if (!isDrawingRectangle) return;
+    //   const x = Math.min(startXRectangle, e.offsetX);
+    //   const y = Math.min(startYRectangle, e.offsetY);
+    //   const width = Math.abs(startXRectangle - e.offsetX);
+    //   const height = Math.abs(startYRectangle - e.offsetY);
+    //   rectangleOverlayRectangle.style.left = `${x}px`;
+    //   rectangleOverlayRectangle.style.top = `${y}px`;
+    //   rectangleOverlayRectangle.style.width = `${width}px`;
+    //   rectangleOverlayRectangle.style.height = `${height}px`;
+    // }
+
+    // function handleMouseUpRectangle() {
+    //   if (!isDrawingRectangle) return;
+    //   isDrawingRectangle = false;
+    //   imagesContainer.removeEventListener('mousemove', handleMouseMoveRectangle);
+    //   imagesContainer.removeEventListener('mouseup', handleMouseUpRectangle);
+    //   if (currentImage) {
+    //     currentImage.style.pointerEvents = 'auto';
+    //   }
+    // }
+
+    // // 点击圆形按钮鼠标样式为圆形
+    // const circleButton = document.querySelector('.circle-button');
+    // circleButton.addEventListener('click', () => {
+    //   document.body.style.cursor = 'crosshair';
+    //   isDrawingCircle = true;
+    // });
+
+    // imagesContainer.addEventListener('mousedown', handleMouseDownCircle);
+
+    // function handleMouseDownCircle(e) {
+    //   if (e.target.tagName === 'IMG' && isDrawingCircle) {
+    //     startXCircle = e.offsetX;
+    //     startYCircle = e.offsetY;
+    //     circleOverlayCircle = document.createElement('div');
+    //     circleOverlayCircle.className = 'circle-overlay';
+    //     imagesContainer.appendChild(circleOverlayCircle);
+    //     currentImage = e.target;
+    //     if (currentImage) {
+    //       currentImage.style.pointerEvents = 'none';
+    //     }
+    //     imagesContainer.addEventListener('mousemove', handleMouseMoveCircle);
+    //     imagesContainer.addEventListener('mouseup', handleMouseUpCircle);
+    //   }
+    // }
+
+    // function handleMouseMoveCircle(e) {
+    //   if (!isDrawingCircle) return;
+    //   const x = Math.min(startXCircle, e.offsetX);
+    //   const y = Math.min(startYCircle, e.offsetY);
+    //   const width = Math.abs(startXCircle - e.offsetX);
+    //   const height = Math.abs(startYCircle - e.offsetY);
+    //   circleOverlayCircle.style.left = `${x}px`;
+    //   circleOverlayCircle.style.top = `${y}px`;
+    //   circleOverlayCircle.style.width = `${width}px`;
+    //   circleOverlayCircle.style.height = `${height}px`;
+    // }
+
+    // function handleMouseUpCircle() {
+    //   if (!isDrawingCircle) return;
+    //   isDrawingCircle = false;
+    //   imagesContainer.removeEventListener('mousemove', handleMouseMoveCircle);
+    //   imagesContainer.removeEventListener('mouseup', handleMouseUpCircle);
+    //   if (currentImage) {
+    //     currentImage.style.pointerEvents = 'auto';
+    //   }
+    // }
+
+    // // 点击多边形按钮鼠标样式为多边形
+    // const polygonButton = document.querySelector('.polygon-button');
+    // polygonButton.addEventListener('click', () => {
+    //   document.body.style.cursor = 'crosshair';
+    //   isDrawingPolygon = true;
+    // });
+
+    // imagesContainer.addEventListener('mousedown', handleMouseDownPolygon);
+
+    // function handleMouseDownPolygon(e) {
+    //   if (e.target.tagName === 'IMG' && isDrawingPolygon) {
+    //     startXPolygon = e.offsetX;
+    //     startYPolygon = e.offsetY;
+    //     polygonOverlayPolygon = document.createElement('div');
+    //     polygonOverlayPolygon.className = 'polygon-overlay';
+    //     imagesContainer.appendChild(polygonOverlayPolygon);
+    //     currentImage = e.target;
+    //     if (currentImage) {
+    //       currentImage.style.pointerEvents = 'none';
+    //     }
+    //     imagesContainer.addEventListener('mousemove', handleMouseMovePolygon);
+    //     imagesContainer.addEventListener('mouseup', handleMouseUpPolygon);
+    //   }
+    // }
+
+    // function handleMouseMovePolygon(e) {
+    //   if (!isDrawingPolygon) return;
+    //   const x = Math.min(startXPolygon, e.offsetX);
+    //   const y = Math.min(startYPolygon, e.offsetY);
+    //   const width = Math.abs(startXPolygon - e.offsetX);
+    //   const height = Math.abs(startYPolygon - e.offsetY);
+    //   polygonOverlayPolygon.style.left = `${x}px`;
+    //   polygonOverlayPolygon.style.top = `${y}px`;
+    //   polygonOverlayPolygon.style.width = `${width}px`;
+    //   polygonOverlayPolygon.style.height = `${height}px`;
+    // }
+
+    // function handleMouseUpPolygon() {
+    //   if (!isDrawingPolygon) return;
+    //   isDrawingPolygon = false;
+    //   imagesContainer.removeEventListener('mousemove', handleMouseMovePolygon);
+    //   imagesContainer.removeEventListener('mouseup', handleMouseUpPolygon);
+    //   if (currentImage) {
+    //     currentImage.style.pointerEvents = 'auto';
+    //   }
+    // }
+
+
+
+  </script>
+</body>
+
+</html>
