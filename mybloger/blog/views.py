@@ -2,10 +2,10 @@ from django.shortcuts import render
 
 # Create your views here.
 def index(request):
-    return render(request, template_name='html/index.html')
+    return render(request, template_name='blog/index.html')
 
 def remendations(request):
-    return render(request, template_name='html/remendations.html')
+    return render(request, template_name='blog/remendations.html')
 
 def blog_detail(request,blog_id):
     return render(request, template_name='html/blog_detail.html')
