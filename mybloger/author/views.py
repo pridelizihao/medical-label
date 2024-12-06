@@ -15,7 +15,7 @@ User = get_user_model()
 # Create your views here.
 def my_login(request):
     if request.method == 'GET':
-        return render(request, 'html/login.html')
+        return render(request, 'author/login.html')
     else:
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -35,7 +35,7 @@ def my_login(request):
         else:
             form.add_error(email, '邮箱或密码错误')
             #print(form.errors)
-            return render(request, 'html/login.html', {'form': form})
+            return render(request, 'author/login.html', {'form': form})
 
 
 
@@ -44,7 +44,7 @@ def my_login(request):
 @require_http_methods(['GET', 'POST'])
 def register(request):
     if request.method == 'GET':
-        return render(request, 'html/register.html')
+        return render(request, 'author/register.html')
     else:
         form = RegisterForm(request.POST)
         if form.is_valid():
@@ -52,10 +52,10 @@ def register(request):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             User.objects.create_user(username=username, email=email, password=password)
-            return render(request, 'html/login.html')
+            return render(request, 'author/login.html')
         else:
             print(form.errors)
-            return render(request, 'html/register.html', {'form': form})
+            return render(request, 'author/register.html', {'form': form})
             
 
 def send_email_captcha(request):
