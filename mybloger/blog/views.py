@@ -4,6 +4,9 @@ from django.shortcuts import render
 def index(request):
     return render(request, template_name='html/index.html')
 
+def remendations(request):
+    return render(request, template_name='html/remendations.html')
+
 def blog_detail(request,blog_id):
     return render(request, template_name='html/blog_detail.html')
 
