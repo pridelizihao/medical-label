@@ -29,9 +29,11 @@ def my_login(request):
                 login(request, user)
                 user.is_authenticated
                 if remembers:
-                    request.session.set_expiry(None)
+                    # 设置session过期时间为14天
+                    request.session.set_expiry(60 * 60 * 24 * 14)
                     # return JsonResponse({'code': 200, "msg": "登录成功"})
                 else:
+                    # 设置session过期时间为浏览器关闭
                     request.session.set_expiry(0)
                 # return render(request, 'html/label-interface.html')
                 return redirect(reverse("author:label"))
