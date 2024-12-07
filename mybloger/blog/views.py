@@ -9,6 +9,16 @@ def index(request):
 def remendations(request):
     return render(request, template_name='blog/remendations.html')
 
+def team(request):
+    return render(request, template_name='blog/team.html')
+
+def product(request):
+    return render(request, template_name='blog/product.html')
+
+def contact(request):
+    return render(request, template_name='blog/contact.html')
+
+
 def blog_detail(request,blog_id):
     return render(request, template_name='html/blog_detail.html')
 
