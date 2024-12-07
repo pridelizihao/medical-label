@@ -61,7 +61,7 @@ def register(request):
             return redirect(reverse('author:login'))
         else:
             print(form.errors)
-            return render(request, 'html/register.html', {'form': form})
+            return render(request, 'author/register.html', {'form': form})
             
 
 def send_email_captcha(request):
@@ -88,5 +88,5 @@ def send_email_captcha(request):
     )
     return JsonResponse({'code': 200, "msg": "验证码发送成功"})    
  
-def label_interface(request):
-    return render(request, 'html/label-interface.html')
+def label(request):
+    return render(request, 'author/label-interface.html')

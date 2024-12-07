@@ -1,0 +1,121 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0,user-scalable=yes">
+  <!-- 通过CDN引入Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <meta name="description" content="医学标注平台，自动化标注和图片标注">
+  <link rel="stylesheet" href="{% static 'css/label-interface.css' %}">
+  
+  <title>医学标注平台</title>
+  
+</head>
+
+<body>
+  <div class="button-container" style="display:flex;justify-content:flex-start;">
+    <!-- <div style="display:flex;">
+      <button class="not-frame file-button">文件</button>
+      <button class="not-frame">工具</button>
+      <button class="not-frame auto-button">自动标注</button>
+      <button class="not-frame transfer-button">云端</button>
+      <button class="not-frame">编辑</button>
+      <button class="not-frame">窗口</button>
+      <button class="not-frame">关闭</button>
+      <button class="not-frame">帮助</button>
+      <button class="not-frame">视图</button>
+      <button class="not-frame">测量</button>
+    </div> -->
+    <div>
+      <button type="button" style="margin-top:20px;" class="btn btn-danger file-button">文件</button>
+      <button type="button" style="margin-top:20px;" class="btn btn-danger">工具</button>
+      <button type="button" style="margin-top:20px;" class="btn btn-danger auto-button">自动标注</button>
+      <button type="button" style="margin-top:20px;" class="btn btn-danger transfer-button">云端</button>
+      <button type="button" style="margin-top:20px;" class="btn btn-danger">编辑</button>
+      <button type="button" style="margin-top:20px;" class="btn btn-danger">窗口</button>
+      <button type="button" style="margin-top:20px;" class="btn btn-danger">关闭</button>
+      <button type="button" style="margin-top:20px;" class="btn btn-danger">帮助</button>
+      <button type="button" style="margin-top:20px;" class="btn btn-danger">视图</button>
+      <button type="button" style="margin-top:20px;" class="btn btn-danger">测量</button>
+    </div>
+    <img src="{% static 'images/mylogo.png' %}" alt="soochow university" class="soochow">
+  </div>
+
+  <hr>
+
+  <div>
+    <button class="haveframe mouse-button">
+      <img src="{% static 'images/鼠标.png' %}" alt="箭头" class="litlesize">
+    </button>
+    <button class="haveframe oval-button chang-button">
+      <img src="{% static 'images/长方形.png'%} " alt="长方形" class="litlesize">
+    </button>
+    <button class="haveframe oval-button eillipse-button">
+      <img src="{% static 'images/椭圆形1.png' %}" alt="椭圆形" class="litlesize">
+    </button>
+    <button class="haveframe oval-button line-button">
+      <img src="{% static 'images/直线.png' %}" alt="直线" class="litlesize">
+    </button>
+    <button class="haveframe oval-button polygon-button">
+      <img src="{% static 'images/任意多边形.png' %}" alt="任意多边形" class="litlesize">
+    </button>
+    <button class="haveframe oval-button">
+      <img src="{% static 'images/自由曲线.png' %}" alt="自由曲线" class="litlesize">
+    </button>
+    <button class="haveframe brush-button">
+      <img src="{% static 'images/brush.png' %}" alt="长方形" class="litlesize">
+    </button>
+    <button class="haveframe">
+      <img src="{% static 'images/撤回符号.png' %}" alt="撤回符号" class="litlesize">
+    </button>
+    <button class="haveframe">
+      <img src="{% static 'images/恢复.png' %}" alt="恢复符号" class="litlesize">
+    </button>
+    <button class="haveframe tag-button">
+      <img src="{% static 'images/tag.png' %}" alt="标签" class="litlesize">
+    </button>
+    <button class="haveframe">
+      <img src="{% static 'images/color.png' %}" alt="颜色" class="litlesize">
+    </button>
+  </div>
+  <hr>
+
+  <div class="folder-line">
+    <span> 文 件 夹</span>
+  </div>
+  <!-- <div class="dashed-box" id="dropZone">
+    <span class="plus-sign">+</span><br>
+    拖入图片
+  </div> -->
+  <!-- 图片显示区域 -->
+  <!-- <div id="images-container"></div> -->
+  <!-- 隐藏的文件输入元素 -->
+  <input type="file" id="fileInput" multiple accept="image/*">
+  <canvas id="drawCanvas" width="800" height="600" style="border:1px solid #000000;"></canvas>
+
+
+
+
+  <script src="{% static 'js/wenjianbutton.js' %}"></script>
+  <script src="{% static 'js/wenjianopen1.js' %}"></script>
+  <script src="{% static 'js/auto.js' %}"></script>
+  <script src="{% static 'js/yunduan.js' %}"></script>
+  <script src="{% static 'js/tools.js' %}"></script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+  
+
+  
