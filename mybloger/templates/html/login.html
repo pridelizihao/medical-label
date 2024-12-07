@@ -16,9 +16,6 @@
         <label for="password" class="form-label">password</label>
         <input type="password" class="form-control" name="password" id="password" placeholder="Enter password" required="">
       </div>
-      {% if form.email.errors %}
-        <div class="alert alert-danger">{{ form.email.errors.0 }}</div>
-      {% endif %}
       <div class="form-check mb-3">
         <input class="form-check-input" type="checkbox" value="" id="flexCheckIndeterminate">
         <label class="form-check-label" for="flexCheckIndeterminate">

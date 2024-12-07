@@ -1,5 +1,6 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,reverse
 from django.http.response import JsonResponse
+from django.http import HttpResponse
 import string
 import random
 from django.core.mail import send_mail
@@ -8,6 +9,7 @@ from django.views.decorators.http import require_http_methods
 from .forms import RegisterForm, LoginForm
 from django.contrib.auth import get_user_model,login
 from django.contrib.auth.models import User
+
 
 User = get_user_model()
 
@@ -24,19 +26,23 @@ def my_login(request):
             remembers = form.cleaned_data['remember']
             user = User.objects.filter(email=email).first()
             if user and user.check_password(password):
-                #登录成功
                 login(request, user)
                 user.is_authenticated
                 if remembers:
                     request.session.set_expiry(None)
+                    # return JsonResponse({'code': 200, "msg": "登录成功"})
                 else:
                     request.session.set_expiry(0)
-                return render(request, 'html/label-interface.html')
-        else:
-            form.add_error(email, '邮箱或密码错误')
-            #print(form.errors)
-            return render(request, 'author/login.html', {'form': form})
-
+                # return render(request, 'html/label-interface.html')
+                return redirect(reverse("author:label"))
+            elif not user:
+                # form.add_error(email, '邮箱不存在')
+                form.add_error("email", '邮箱不存在')
+                return render(request, 'author/login.html', {'form': form})
+            else:
+                # form.add_error(email，"密码错误")
+                form.add_error("email", '密码错误')
+                return render(request, 'author/login.html', {'form': form}) 
 
 
 
@@ -52,10 +58,10 @@ def register(request):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             User.objects.create_user(username=username, email=email, password=password)
-            return render(request, 'author/login.html')
+            return redirect(reverse('author:login'))
         else:
             print(form.errors)
-            return render(request, 'author/register.html', {'form': form})
+            return render(request, 'html/register.html', {'form': form})
             
 
 def send_email_captcha(request):
@@ -82,3 +88,5 @@ def send_email_captcha(request):
     )
     return JsonResponse({'code': 200, "msg": "验证码发送成功"})    
  
+def label_interface(request):
+    return render(request, 'html/label-interface.html')

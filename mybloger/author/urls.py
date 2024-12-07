@@ -6,5 +6,6 @@ app_name = 'author'
 urlpatterns = [
     path('login/', views.my_login, name='login'),
     path('register/', views.register, name='register'),
-    path("captcha/", views.send_email_captcha, name="captcha")
+    path("captcha/", views.send_email_captcha, name="captcha"),
+    path("label/", views.label_interface, name="label")
 ]
