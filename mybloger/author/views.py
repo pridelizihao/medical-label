@@ -8,7 +8,7 @@ from django.core.mail import send_mail
 from .models import Captcha
 from django.views.decorators.http import require_http_methods
 from .forms import RegisterForm, LoginForm
-from django.contrib.auth import get_user_model,login
+from django.contrib.auth import get_user_model,login,logout
 from django.contrib.auth.models import User
 import app01
 
@@ -37,7 +37,7 @@ def my_login(request):
                     # 设置session过期时间为浏览器关闭
                     request.session.set_expiry(0)
                 # return render(request, 'html/label-interface.html')
-                return redirect(reverse('app01:label'))
+                return redirect(reverse('app01:person'))
             elif not user:
                 # form.add_error(email, '邮箱不存在')
                 form.add_error("email", '邮箱不存在')
@@ -91,5 +91,6 @@ def send_email_captcha(request):
     )
     return JsonResponse({'code': 200, "msg": "验证码发送成功"})    
  
-def label(request):
-    return render(request, 'author/label-interface.html')
+def my_logout(request):
+    logout(request)
+    return redirect(reverse('author:login'))

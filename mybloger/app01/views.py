@@ -19,9 +19,10 @@ def create_product(request):
     return render(request, 'upload_product.html', {'form': form})
 
 def label(request):
-    return render(request, 'author/label-interface.html')
+    return render(request, 'label-interface.html')
 
-
+def person(request):
+    return render(request, 'person.html')
  
 def image_list(request):
     images = Product.objects.all()
