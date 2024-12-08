@@ -1,4 +1,5 @@
 from django.shortcuts import render,redirect,reverse
+from django.urls import reverse
 from django.http.response import JsonResponse
 from django.http import HttpResponse
 import string
@@ -9,7 +10,7 @@ from django.views.decorators.http import require_http_methods
 from .forms import RegisterForm, LoginForm
 from django.contrib.auth import get_user_model,login
 from django.contrib.auth.models import User
-
+import app01
 
 User = get_user_model()
 
@@ -36,7 +37,7 @@ def my_login(request):
                     # 设置session过期时间为浏览器关闭
                     request.session.set_expiry(0)
                 # return render(request, 'html/label-interface.html')
-                return redirect(reverse("author:label"))
+                return redirect(reverse('app01:label'))
             elif not user:
                 # form.add_error(email, '邮箱不存在')
                 form.add_error("email", '邮箱不存在')

@@ -16,6 +16,9 @@ def create_product(request):
     else:
         form = ProductForm()
     return render(request, 'upload_product.html', {'form': form})
+
+def label(request):
+    return render(request, 'author/label-interface.html')
  
 def image_list(request):
     images = Product.objects.all()
