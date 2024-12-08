@@ -18,7 +18,7 @@ def create_product(request):
     return render(request, 'upload_product.html', {'form': form})
  
 def image_list(request):
-    images = Base64Image.objects.all()
+    images = Product.objects.all()
     return render(request, 'image_list.html', {'images': images})
 
 def one(request):

@@ -9,7 +9,7 @@
         {% for image in images %}
             <li>
                 <h3>{{ image.title }}</h3>
-                <img src="data:image/jpeg;base64,{{ image.image_data }}" alt="{{ image.title }}">
+                <img src="data:image/jpeg;base64,{{ image.image }}" alt="{{ image.title }}">
             </li>
         {% endfor %}
     </ul>
