@@ -1,25 +1,26 @@
 import base64
-from django.shortcuts import render, redirect
-from app01.forms import Base64ImageForm
-from app01.models import Base64Image
+from django.shortcuts import render, redirect, reverse
+from app01.forms import ProductForm
+from app01.models import Product 
  
-def upload_base64_image(request):
+
+
+from.forms import ProductForm
+
+def create_product(request):
     if request.method == 'POST':
-        form = Base64ImageForm(request.POST, request.FILES)
+        form = ProductForm(request.POST, request.FILES)  # 注意要传递request.FILES来接收文件数据
         if form.is_valid():
-            title = form.cleaned_data['title']
-            image = form.cleaned_data['image']
-            image_data = base64.b64encode(image.read()).decode('utf-8')
-            Base64Image.objects.create(title=title, image_data=image_data)
-            return redirect('image_list')
+            form.save()  # 保存表单数据到模型，同时图片会被存储到指定路径
+            return redirect(reverse('app01:upload_image'))  # 假设成功后重定向到产品列表页面，需根据实际配置
     else:
-        form = Base64ImageForm()
-    return render(request, 'html/upload_base64_image.html', {'form': form})
+        form = ProductForm()
+    return render(request, 'upload_product.html', {'form': form})
  
 def image_list(request):
     images = Base64Image.objects.all()
-    return render(request, 'html/image_list.html', {'images': images})
+    return render(request, 'image_list.html', {'images': images})
 
 def one(request):
-    return render(request, 'html/01.html')
+    return render(request, '01.html')
 

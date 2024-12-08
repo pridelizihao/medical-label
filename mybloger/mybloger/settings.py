@@ -152,5 +152,5 @@ EMAIL_HOST_PASSWORD = 'mtuvslejoleaeaea'
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'pridelizihao@foxmail.com'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
-MEDIA_URL = '/uploads/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'

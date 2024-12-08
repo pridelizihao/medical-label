@@ -1,10 +1,12 @@
 from django.db import models
 
 # Create your models here.
-class Base64Image(models.Model):
-    title = models.CharField(max_length=100, verbose_name="标题")
-    image_data = models.TextField(verbose_name="图片数据")  # 用于存储base64编码的图片数据
-    image = models.ImageField(upload_to='images/%Y/%m/%d', verbose_name="图片")  # 用于存储图片文件
-    create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
+
+
+class Product(models.Model):
+    name = models.CharField(max_length=100)  # 产品名称字段，示例，可根据实际修改
+    description = models.TextField()  # 产品描述字段，示例
+    image = models.ImageField(upload_to='product_images/')  # 图片字段，指定上传路径
+
     def __str__(self):
-        return self.title
+        return self.name

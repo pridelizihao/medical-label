@@ -1,7 +1,14 @@
 from django import forms
+from app01.models import  Product
 
         
-class Base64ImageForm(forms.Form):
-    title = forms.CharField(max_length=100)
-    image = forms.ImageField()
+from django import forms
+from.models import Product
+
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ['name', 'description', 'image']
+    
+    
  
