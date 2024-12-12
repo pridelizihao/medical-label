@@ -62,3 +62,12 @@ class LoginForm(forms.Form):
         required=False,
         label='记住我'
         )
+    
+class ProfileForm(forms.ModelForm):
+    avatar = forms.ImageField(
+        label='头像',
+        error_messages={'required': '请上传头像', 'invalid': '头像格式错误'}
+        )
+    class Meta:
+        model = User    
+        fields = ['username', 'email', 'avatar']        

@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "simpleui",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -40,6 +41,7 @@ INSTALLED_APPS = [
     "blog",
     "author",
     "app01",
+    "annotation"
 ]
 
 MIDDLEWARE = [
@@ -120,7 +122,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-hans'
+
+TIME_ZONE = 'Asia/Shanghai'
 
 TIME_ZONE = 'UTC'
 
