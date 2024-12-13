@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <style>
+    /* 整体页面容器样式 */
+   .profile-page {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 50px 0;
+    }
+
+    /* 头像区域样式 */
+   .profile-avatar {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+  .profile-avatar:hover {
+      transform: scale(1.1);
+    }
+
+    /* 用户名样式 */
+   .profile-username {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    /* 个人信息区域样式 */
+   .profile-info {
+      width: 50%;
+      text-align: center;
+    }
+
+    /* 信息项样式 */
+   .profile-info-item {
+      margin-bottom: 15px;
+      font-size: 16px;
+    }
+
+    /* 编辑按钮样式 */
+   .edit-profile-button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+  .edit-profile-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="profile-page">
+    <!-- 头像 -->
+    <img src="https://github.com/mdo.png" alt="Profile Avatar" class="profile-avatar">
+    <!-- 用户名 -->
+    <h1 class="profile-username">{{ user.username }}</h1>
+    <!-- 个人信息 -->
+    <div class="profile-info">
+      <p class="profile-info-item"><span class="profile-info-label">邮箱:</span> {{ user.email }}</p>
+      <p class="profile-info-item"><span class="profile-info-label">注册日期:</span> {{ user.date_joined }}</p>
+      <p class="profile-info-item"><span class="profile-info-label">最近登录:</span> {{ user.last_login }}</p>
+      <p class="profile-info-item"><span class="profile-info-label">用户类型:</span>
+      {% if user.is_staff %}
+        <span class="badge bg-success">管理员</span>
+      {% else %}
+        <span class="badge bg-secondary">普通用户</span>
+      {% endif %}
+      </p>
+    </div>
+    <!-- 编辑按钮 -->
+    <a href="{% url 'app01:edit_profile' %}" class="btn btn-primary btn-block">编辑个人资料</a>
+  </div>
+</body>
+
+</html>
+
+
+
