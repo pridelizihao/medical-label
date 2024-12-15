@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>base64图片张氏</title>
+    <title>图片展示</title>
 </head>
 <body>
     <h2>图片列表</h2>
     <ul>
         {% for image in images %}
             <li>
-                <h3>{{ image.title }}</h3>
-                <img src="data:image/jpeg;base64,{{ image.image }}" alt="{{ image.title }}">
+                <h3>{{ image.name }}</h3>
+                <img src="{{ image.image.url }}" style="width: 600px; height: 400px;" alt="{{ image.name }}">
             </li>
         {% endfor %}
     </ul>

@@ -206,7 +206,7 @@
        
         <ul class="nav nav-pills flex-column mb-auto">
             <li class="nav-item">
-                <a href="#" class="nav-link active" aria-current="page">
+                <a href="{% url 'app01:home' %}" class="nav-link active" aria-current="page">
                     <svg class="bi pe-none me-2" width="16" height="16">
                         <use xlink:href="#home"></use>
                     </svg>
@@ -214,7 +214,7 @@
                 </a>
             </li>
             <li>
-                <a href="#" class="nav-link link-dark">
+                <a href="{% url 'app01:upload_image' %}" class="nav-link link-dark">
                     <svg class="bi pe-none me-2" width="16" height="16">
                         <use xlink:href="#speedometer2"></use>
                     </svg>
@@ -273,7 +273,7 @@
             <div id="imageCarousel" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img src="http://127.0.0.1:5000/static/sucai/machineeye.jpg"
+                        <img src="http://127.0.0.1:5000/static/sucai/annotation1.jpg"
                             style="width: 800px; height: 300px;" class="d-block w-100" alt="第一张图片">
                     </div>
                     <div class="carousel-item">

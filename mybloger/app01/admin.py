@@ -1,9 +1,9 @@
 from django.contrib import admin
 
 # Register your models here.
-from app01.models import Product
+from app01.models import user_image
 
-@admin.register(Product)
-class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description', 'image', 'image_json')   
+@admin.register(user_image)
+class user_imageAdmin(admin.ModelAdmin):
+    list_display = ['name', 'author', 'user', 'time', 'image', 'image_json']      
     

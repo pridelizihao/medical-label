@@ -90,7 +90,7 @@
   <div class="d-flex flex-column flex-shrink-0 p-3 bg-light sidebar" style="width: 280px;">
     <ul class="nav nav-pills flex-column mb-auto">
       <li class="nav-item">
-        <a href="#" class="nav-link active" aria-current="page">
+        <a href="{% url 'app01:home' %}" class="nav-link active" aria-current="page">
           <svg class="bi pe-none me-2" width="16" height="16">
             <use xlink:href="#home"></use>
           </svg>
@@ -98,7 +98,7 @@
         </a>
       </li>
       <li>
-        <a href="#" class="nav-link link-dark">
+        <a href="{% url 'app01:upload_image' %}" class="nav-link link-dark">
           <svg class="bi pe-none me-2" width="16" height="16">
             <use xlink:href="#speedometer2"></use>
           </svg>
