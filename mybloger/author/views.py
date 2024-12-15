@@ -37,7 +37,7 @@ def my_login(request):
                     # 设置session过期时间为浏览器关闭
                     request.session.set_expiry(0)
                 # return render(request, 'html/label-interface.html')
-                return redirect(reverse('app01:person'))
+                return redirect(reverse('app01:home'))
             elif not user:
                 # form.add_error(email, '邮箱不存在')
                 form.add_error("email", '邮箱不存在')

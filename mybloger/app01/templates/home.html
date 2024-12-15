@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图像标注系统页面</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 侧边栏样式 */
+       .sidebar {
+            background-color: #f8f9fa;
+            height: 100vh;
+            width: 280px;
+            transition: width 0.3s ease;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 10;
+        }
+
+        /* 侧边栏链接样式 */
+       .sidebar a {
+            color: #333;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            display: block;
+            padding: 15px 20px;
+            margin-bottom: 5px;
+        }
+
+       .sidebar a:hover {
+            background-color: #e9ecef;
+            color: #007bff;
+        }
+
+        /* 激活的链接样式 */
+       .sidebar a.active {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        /* 头像和用户名容器样式 */
+       .user-info {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+       .user-info:hover {
+            background-color: #e9ecef;
+        }
+
+        /* 头像样式 */
+       .user-info img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin-right: 10px;
+            transition: transform 0.3s ease;
+        }
+
+       .user-info:hover img {
+            transform: scale(1.1);
+        }
+
+        /* 下拉菜单样式 */
+       .dropdown-menu {
+            animation: dropdownAnimation 0.3s ease;
+        }
+
+        @keyframes dropdownAnimation {
+            0% {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 标题容器样式 */
+       .page-title {
+            margin-left: 280px;
+            text-align: center;
+            padding-top: 20px;
+        }
+
+        /* 轮播图容器样式 */
+       .carousel-container {
+            margin-left: 100px;
+            margin-top: 20px;
+            width: 1200px;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            border-radius: 15px;
+        }
+
+        #imageCarousel {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+        }
+
+        #imageCarousel.carousel-inner {
+            border-radius: 10px;
+        }
+
+        #imageCarousel.carousel-inner img {
+            border-radius: inherit;
+        }
+
+        #imageCarousel.carousel-control-prev,
+        #imageCarousel.carousel-control-next {
+            width: 8%;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 50%;
+            padding: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        #imageCarousel.carousel-control-prev-icon,
+        #imageCarousel.carousel-control-next-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* 信息卡片容器样式 */
+       .info-container {
+            margin-left: 100px;
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+            width: 800px;
+        }
+
+        /* 图片数量卡片样式 */
+       .image_count.card {
+            margin-bottom: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+       .image_count.card:hover {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            transform: translateY(-3px);
+        }
+
+        /* 最近标注图片容器样式 */
+       .recent-image {
+            margin-top: 20px;
+            margin-left: 100px;
+            text-align: center;
+        }
+
+       .recent-image h3 {
+            margin-bottom: 10px;
+        }
+
+       .recent-image div {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+       .recent-image div:hover {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            transform: translateY(-3px);
+        }
+
+        /* 最近标注数据容器样式 */
+       .recent-data {
+            margin-left: 50px;
+            padding: 70px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+       .recent-data:hover {
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+            transform: translateY(-3px);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="d-flex flex-column flex-shrink-0 p-3 bg-light sidebar" style="width: 280px;">
+       
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item">
+                <a href="#" class="nav-link active" aria-current="page">
+                    <svg class="bi pe-none me-2" width="16" height="16">
+                        <use xlink:href="#home"></use>
+                    </svg>
+                    首页
+                </a>
+            </li>
+            <li>
+                <a href="#" class="nav-link link-dark">
+                    <svg class="bi pe-none me-2" width="16" height="16">
+                        <use xlink:href="#speedometer2"></use>
+                    </svg>
+                    未标注图片
+                </a>
+            </li>
+            <li>
+                <a href="#" class="nav-link link-dark">
+                    <svg class="bi pe-none me-2" width="16" height="16">
+                        <use xlink:href="#table"></use>
+                    </svg>
+                    人工标注图片
+                </a>
+            </li>
+            <li>
+                <a href="#" class="nav-link link-dark">
+                    <svg class="bi pe-none me-2" width="16" height="16">
+                        <use xlink:href="#grid"></use>
+                    </svg>
+                    模型标注图片
+                </a>
+            </li>
+            <li>
+                <a href="#" class="nav-link link-dark">
+                    <svg class="bi pe-none me-2" width="16" height="16">
+                        <use xlink:href="#people-circle"></use>
+                    </svg>
+                    Customers
+                </a>
+            </li>
+        </ul>
+        <hr>
+
+        <div class="dropdown">
+            <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle user-info"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                <strong>{{ user.username }}</strong>
+            </a>
+            <ul class="dropdown-menu text-small shadow">
+                <li><a class="dropdown-item" href="#">New project...</a></li>
+                <li><a class="dropdown-item" href="#">Settings</a></li>
+                <li><a class="dropdown-item" href="{% url 'app01:profile' %}">Profile</a></li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a href="{% url 'author:logout' %}" class="dropdown-item" href="#">Sign out</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="page-title">
+        <h1>欢迎使用图像标注系统</h1>
+
+        <div class="carousel-container">
+            <div id="imageCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="http://127.0.0.1:5000/static/sucai/machineeye.jpg"
+                            style="width: 800px; height: 300px;" class="d-block w-100" alt="第一张图片">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="http://127.0.0.1:5000/static/sucai/annotation4.jpeg"
+                            style="width: 800px; height: 300px;" class="d-block w-100" alt="第二张图片">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="http://127.0.0.1:5000/static/sucai/annotation.jpg"
+                            style="width: 800px; height: 300px;" class="d-block w-100" alt="第二张图片">
+                    </div>
+                    <!-- 在这里添加更多走马灯项 -->
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#imageCarousel"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">上一个</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#imageCarousel"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">下一个</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="info-container">
+            <div class="image_count">
+                <div class="card bg-gray text-white" style="width: 500px">
+                    <div class="card-body">未标注图片：{{materials_num}}</div>
+                </div>
+                <div class="card bg-gray text-white" style="width: 500px">
+                    <div class="card-body">模型已标注：{{images_num}}</div>
+                </div>
+                <div class="card bg-gray text-white" style="width: 500px">
+                    <div class="card-body">人工已标注：{{annotationimages_num}}</div>
+                </div>
+            </div>
+
+            <div class="recent-image">
+                <h3 style="color:black">最近标注的一张图片为：</h3>
+                <div style="width: 300px; height: 300px">
+                    <img style="width: 300px; height: 300px"
+                        src="http://127.0.0.1:5000/static/annotationimages/{{lastimg}}">
+                </div>
+            </div>
+
+            <div class="recent-data">
+                <h5 style="color: black;margin-left: 90px;writing-mode: horizontal-tb;">最近的标注数据</h3>
+                <div id="jsondata_card"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // 当页面加载时，为侧边栏链接添加点击事件处理
+        $(document).ready(function () {
+            $('.sidebar a').on('click', function () {
+                // 移除所有链接的 active 类
+                $('.sidebar a').removeClass('active');
+                // 为当前点击的链接添加 active 类
+                $(this).addClass('active');
+            });
+
+            // 初始化轮播图，设置自动播放间隔（这里设置为3000毫秒，即3秒，可按需调整）
+            $('#imageCarousel').carousel({
+                interval: 3000
+            });
+        });
+    </script>
+</body>
+
+</html>

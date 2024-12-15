@@ -19,6 +19,9 @@ class rectdata(models.Model):
     label_id = models.ForeignKey(label, on_delete=models.CASCADE)
     create_time = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return "(%s, %s, %s, %s, %s, %s, %s, %s, %s)" % (self.id, self.image_name, self.text, self.startx, self.starty, self.endx, self.endy, self.label_id, self.create_time)          
+
 class polygondata(models.Model):
     id = models.AutoField(primary_key=True)
     image_name = models.CharField(max_length=200)
@@ -27,6 +30,9 @@ class polygondata(models.Model):
     polygon = models.TextField(("Polygon"))
     label_id = models.ForeignKey(label, on_delete=models.CASCADE)
     create_time = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return "(%s, %s, %s, %s, %s, %s)" % (self.id, self.image_name, self.text, self.polygon, self.label_id, self.create_time)          
 
 class circledata(models.Model):
     id = models.AutoField(primary_key=True)
@@ -37,6 +43,9 @@ class circledata(models.Model):
     r = models.IntegerField()
     label_id = models.ForeignKey(label, on_delete=models.CASCADE)
     create_time = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return "(%s, %s, %s, %s, %s, %s, %s, %s)" % (self.id, self.image_name, self.text, self.x, self.y, self.r, self.label_id, self.create_time)          
 
   
 
