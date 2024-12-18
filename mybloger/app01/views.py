@@ -47,7 +47,7 @@ def create_product(request):
                         image=os.path.join('product_image2', file_name),
                     )
                     new_image.save()
-            return redirect('app01:upload_image')
+            return redirect(reverse('app01:upload_image'))  # 假设成功后重定向到产品列表页面，需根据实际配置'app01:upload_image')
         else:
             return HttpResponse("表单验证失败，请检查填写的信息")
     else:
@@ -85,7 +85,7 @@ def upload_folder(request):
                     )
                     new_image.save()
                     print(f"保存图片 {file_name} 相关信息到数据库成功")
-            return redirect('app01:upload_image')
+            return redirect(reverse('app01:upload_image'))  # 假设成功后重定向到产品列表页面，需根据实际配置'app01:upload_image')
         else:
             return HttpResponse("表单验证失败，请检查填写的信息")
     else:
@@ -93,8 +93,10 @@ def upload_folder(request):
     return render(request, 'upload_product2.html', {'form2': form2})
 
 def materials(request):
-    images = user_image.objects.all(id=request.user.id)
-    return render(request,'upload_product.html',{'images':images})
+    images = user_image.objects.all()
+    response = render(request,'image_list.html', {'images': images})
+    response['Cache - Control'] = 'no - cache'
+    return response
 
 def label(request):
     return render(request, 'label-interface.html')
@@ -117,5 +119,5 @@ def edit_profile(request):
 
 @login_required
 def image_list(request):
-    images = user_image.objects.all()
+    images = user_image.objects.filter(user_id = request.user.id)
     return render(request, 'image_list.html', {'images': images})
