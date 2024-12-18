@@ -167,20 +167,25 @@
         <div>
             <h2>上传文件夹</h2>
             <form class="form-horizontal" method="post" enctype="multipart/form-data"
-                action="{% url 'app01:upload_product2' %}">
+                action="{% url 'app01:upload_image' %}">
                 {% csrf_token %}
                 {{ form2.as_p }}
-                <button class="btn btn-success" type="submit" onclick="success1()" style="width:200px"><i
+                <button class="btn btn-success" type="submit" onclick="success2()" style="width:200px"><i
                         class="fas fa-upload"></i> 上传</button>
             </form>
         </div>
+        {% for image in images %}
+             {{imgae.name}}
+        {% endfor %}
     </div>
     <div style = "margin-left: 420px;margin-top: 80px;">
         <h2>已上传图片</h2>
-        {% for image in images %}
         <div>
+            
             <div class="image-item" onclick="openFullscreen('{{ image }}')">
+                {% for image in images %}
                 <img src="{{ image.image.url }}" alt="{{ image }}">
+                {% endfor %}
             </div>
             <div style="margin-left:10px;display:flex">
                 <!-- 模型标注按钮 -->
@@ -196,12 +201,7 @@
                     删除</button>
             </form>
         </div>
-        {% endfor %}
     </div>
-
-
-
-
 
 
     <script>
@@ -216,5 +216,14 @@
         });
     </script>
 </body>
+
+<script>    
+    function success1() {
+        alert("图片上传成功！");
+    }
+        function success2() {
+        alert("文件夹上传成功！");
+    }
+</script>
 
 </html>
