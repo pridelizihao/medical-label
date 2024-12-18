@@ -156,7 +156,8 @@
     <div class="container mt-5" style="margin-left: 400px; display: flex;" id="app">
         <div>
             <h2>上传图片</h2>
-            <form class="form-horizontal" method="post" enctype="multipart/form-data" action="{% url 'app01:upload_image' %}">
+            <form class="form-horizontal" method="post" enctype="multipart/form-data"
+                action="{% url 'app01:upload_image' %}">
                 {% csrf_token %}
                 {{ form1.as_p }}
                 <button class="btn btn-success" type="submit" onclick="success1()" style="width:200px"><i
@@ -165,14 +166,41 @@
         </div>
         <div>
             <h2>上传文件夹</h2>
-            <form class="form-horizontal" method="post" enctype="multipart/form-data" action="{% url 'app01:upload_product2' %}">
-                    {% csrf_token %}
-                    {{ form2.as_p }}
-                    <button class="btn btn-success" type="submit" onclick="success1()" style="width:200px"><i
+            <form class="form-horizontal" method="post" enctype="multipart/form-data"
+                action="{% url 'app01:upload_product2' %}">
+                {% csrf_token %}
+                {{ form2.as_p }}
+                <button class="btn btn-success" type="submit" onclick="success1()" style="width:200px"><i
                         class="fas fa-upload"></i> 上传</button>
             </form>
         </div>
     </div>
+    <div style = "margin-left: 420px;margin-top: 80px;">
+        <h2>已上传图片</h2>
+        {% for image in images %}
+        <div>
+            <div class="image-item" onclick="openFullscreen('{{ image }}')">
+                <img src="{{ image.image.url }}" alt="{{ image }}">
+            </div>
+            <div style="margin-left:10px;display:flex">
+                <!-- 模型标注按钮 -->
+                <button class="btn btn-info" style="width:120px;height:40px"
+                    onclick="openModelAnnotationModal('{{ image }}')"><i class="fas fa-desktop"></i> 模型标注</button>
+                <form style="margin-left:10px" action="/annotatebyself/{{ image }}" method="post">
+                    <button class="btn btn-info" style="width:120px;height:40px"><i class="fas fa-tools"></i>
+                        人工标注</button>
+                </form>
+            </div>
+            <form style="margin-left:10px;margin-top:10px;" action="/deletematerial/{{ image }}" method="post">
+                <button class="btn btn-danger" style="width:250px;height:40px"><i class="fas fa-trash-alt"></i>
+                    删除</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+
+
+
 
 
 

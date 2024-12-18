@@ -47,7 +47,6 @@ def create_product(request):
                         image=os.path.join('product_image2', file_name),
                     )
                     new_image.save()
-                    print(f"保存图片 {file_name} 相关信息到数据库成功")
             return redirect('app01:upload_image')
         else:
             return HttpResponse("表单验证失败，请检查填写的信息")
@@ -93,7 +92,9 @@ def upload_folder(request):
         form2 = UserImageForm2()
     return render(request, 'upload_product2.html', {'form2': form2})
 
-
+def materials(request):
+    images = user_image.objects.all(id=request.user.id)
+    return render(request,'upload_product.html',{'images':images})
 
 def label(request):
     return render(request, 'label-interface.html')
