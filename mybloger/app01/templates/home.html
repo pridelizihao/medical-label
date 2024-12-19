@@ -218,15 +218,15 @@
                     <svg class="bi pe-none me-2" width="16" height="16">
                         <use xlink:href="#speedometer2"></use>
                     </svg>
-                    未标注图片
+                    上传图片或文件夹
                 </a>
             </li>
             <li>
-                <a href="#" class="nav-link link-dark">
+                <a href="{% url 'app01:image_list' %}" class="nav-link link-dark">
                     <svg class="bi pe-none me-2" width="16" height="16">
                         <use xlink:href="#table"></use>
                     </svg>
-                    人工标注图片
+                    查看未标注图片
                 </a>
             </li>
             <li>
@@ -234,7 +234,7 @@
                     <svg class="bi pe-none me-2" width="16" height="16">
                         <use xlink:href="#grid"></use>
                     </svg>
-                    模型标注图片
+                    人工标注图片
                 </a>
             </li>
             <li>
@@ -242,7 +242,7 @@
                     <svg class="bi pe-none me-2" width="16" height="16">
                         <use xlink:href="#people-circle"></use>
                     </svg>
-                    Customers
+                    模型标注图片
                 </a>
             </li>
         </ul>
@@ -301,14 +301,14 @@
 
         <div class="info-container">
             <div class="image_count">
-                <div class="card bg-gray text-white" style="width: 500px">
-                    <div class="card-body">未标注图片：{{materials_num}}</div>
+                <div class="card bg-gray text-black" style="width: 500px ;margin-top: 20px">
+                    <div class="card-body" style=" color:black">未标注图片：<h4>{{num1}} 张</h4></div>
                 </div>
-                <div class="card bg-gray text-white" style="width: 500px">
-                    <div class="card-body">模型已标注：{{images_num}}</div>
+                <div class="card bg-gray text-black" style="width: 500px;margin-top: 20px">
+                    <div class="card-body" style=" color:black">模型已标注：<h4>{{num3}} 张</h4></div>
                 </div>
-                <div class="card bg-gray text-white" style="width: 500px">
-                    <div class="card-body">人工已标注：{{annotationimages_num}}</div>
+                <div class="card bg-gray text-black" style="width: 500px;margin-top: 20px">
+                    <div class="card-body" style=" color:black">人工已标注：<h4>{{num2}} 张</h4></div>
                 </div>
             </div>
 

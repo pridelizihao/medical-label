@@ -13,5 +13,5 @@ urlpatterns = [
     path("edit_profile/",views.edit_profile, name="edit_profile"),
     path("profile/",views.profile, name="profile"),
     path("home/",views.home, name="home"),
-    path("upload_product2/",views.upload_folder, name="upload_product2")
+    path("upload_product2/",views.upload_folder, name="upload_product2"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -92,12 +92,6 @@ def upload_folder(request):
         form2 = UserImageForm2()
     return render(request, 'upload_product2.html', {'form2': form2})
 
-def materials(request):
-    images = user_image.objects.all()
-    response = render(request,'image_list.html', {'images': images})
-    response['Cache - Control'] = 'no - cache'
-    return response
-
 def label(request):
     return render(request, 'label-interface.html')
 
@@ -105,7 +99,10 @@ def person(request):
     return render(request, 'person.html')
 
 def home(request):
-    return render(request, 'home.html')
+    num1 = user_image.objects.filter(user_id = request.user.id).count()
+    num2 = user_image.objects.filter(user_id = request.user.id, islabeled=True).count()
+    num3 = user_image.objects.filter(user_id = request.user.id, isailabeled=True).count()
+    return render(request, 'home.html',{'num1':num1,'num2':num2,'num3':num3})
 
 @login_required
 def profile(request):

@@ -13,6 +13,8 @@ class user_image(models.Model):
     time = models.DateTimeField(default=datetime.datetime.now)    # 时间字段，示例
     image = models.ImageField(upload_to='product_images/')  # 图片字段，指定上传路径
     image_json = models.TextField( null=True, blank=True)  # 图片json字段，示例
+    islabeled = models.BooleanField(default=False)  # 是否标注字段，示例
+    isailabeled = models.BooleanField(default=False)  # 是否AI标注字段，示例
 
     def __str__(self):
         return self.user.username + '-' + self.name
