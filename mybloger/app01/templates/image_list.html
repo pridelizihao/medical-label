@@ -124,7 +124,7 @@
                 </a>
             </li>
             <li>
-                <a href="#" class="nav-link link-dark">
+                <a href="{% url 'app01:image_is_labeled' %}" class="nav-link link-dark">
                     <svg class="bi pe-none me-2" width="16" height="16">
                         <use xlink:href="#grid"></use>
                     </svg>
@@ -132,7 +132,7 @@
                 </a>
             </li>
             <li>
-                <a href="#" class="nav-link link-dark">
+                <a href="{% url 'app01:image_is_ailabeled' %}" class="nav-link link-dark">
                     <svg class="bi pe-none me-2" width="16" height="16">
                         <use xlink:href="#people-circle"></use>
                     </svg>
@@ -162,6 +162,7 @@
 
     <div>
         <div> 已上传图片</div>
+
         {% for image in images %}
         <div style="margin-left: 420px; margin-top: 80px; display: flex; flex-wrap: wrap; gap: 10px;">
             <div class="card" style="width: 30%; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
@@ -178,12 +179,14 @@
             <!-- 模型标注按钮 -->
             <button class="btn btn-info" style="width:120px;height:40px" onclick="alert('模型标注功能暂未开放，敬请期待')"><i
                     class="fas fa-desktop"></i> 模型标注</button>
-            <form style="margin-left:10px" method="post" action="{% url 'app01:image_list' %}">
+            <form style="margin-left:10px" method="post" action="{% url 'app01:annotate_image' image.id %}">
+                {% csrf_token %}
                 <button class="btn btn-info" style="width:120px;height:40px"><i class="fas fa-tools"></i>人工标注</button>
             </form>
         </div>
-        <form style="margin-left:28%;margin-top:10px;" method="post" action="{% url 'app01:image_list' %}">
-            <button class="btn btn-danger" style="width:250px;height:40px"><i class="fas fa-trash-alt"></i>删除</button>
+        <form style="margin-left:28%;margin-top:10px;" method="post" action="{% url 'app01:delete_image' image.id %}">
+            {% csrf_token %}
+            <button class="btn btn-danger" style="width:250px;height:40px"><i class="fas fa-trash-alt" onclick="delete_Image()"></i>删除</button>
         </form>
     </div>
     {% endfor %}
@@ -194,12 +197,19 @@
         // 当页面加载时，为侧边栏链接添加点击事件处理
         $(document).ready(function () {
             $('.sidebar a').on('click', function () {
-                // 移除所有链接的 active 类
-                $('.sidebar a').removeClass('active');
+                 // 移除所有链接的 active 类
+                 $('.sidebar a').removeClass('active');
                 // 为当前点击的链接添加 active 类
                 $(this).addClass('active');
             });
         });
+        function delete_Image() {
+            if (confirm("确定要删除吗？")) {
+                return true;
+            } else {
+                return false;
+            }
+        }
     </script>
 </body>
 

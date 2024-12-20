@@ -6,6 +6,7 @@ import json
 from django.contrib.auth.decorators import login_required
 from author.models import user_head
 from django.conf import settings
+from django.contrib import messages
 import os
 from django.db import transaction
 import datetime
@@ -14,7 +15,6 @@ import datetime
 @login_required
 def create_product(request):
     if request.method == 'POST':
-        form1 = request.POST.get('form1')
         form1 = UserImageForm(request.POST, request.FILES)  # 注意要传递request.FILES来接收文件数据
         form2 = UserImageForm2(request.POST, request.FILES)
         user = request.user
@@ -116,5 +116,26 @@ def edit_profile(request):
 
 @login_required
 def image_list(request):
-    images = user_image.objects.filter(user_id = request.user.id)
+    images = user_image.objects.filter(user_id = request.user.id, islabeled=False, isailabeled=False)
     return render(request, 'image_list.html', {'images': images})
+
+def image_labeled(request):
+    images = user_image.objects.filter(user_id = request.user.id, islabeled=True)
+    return render(request, 'image_labeled.html', {'images': images})
+
+def image_ailabeled(request):
+    images = user_image.objects.filter(user_id = request.user.id, isailabeled=True)
+    return render(request, 'image_ailabeled.html', {'images': images})
+
+
+@login_required
+def delete_image(request, image_id):
+    image = user_image.objects.get(id=image_id)
+    image.delete()
+    messages.success(request, '删除成功')
+    return redirect(reverse('app01:image_list'))
+
+@login_required
+def annotate_image(request, image_id):
+    image = user_image.objects.get(id=image_id)
+    return render(request, 'annotate_image.html', {'image': image})
