@@ -18,4 +18,6 @@ urlpatterns = [
     path("image_is_labeled/",views.image_labeled, name="image_is_labeled"),
     path("image_is_ailabeled/",views.image_ailabeled, name="image_is_ailabeled"),
     path("annotate_image/<int:image_id>/",views.annotate_image, name="annotate_image"),
+    path("01/",views.page, name="01"),
+    path("02/",views.page2, name="02"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

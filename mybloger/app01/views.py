@@ -139,3 +139,9 @@ def delete_image(request, image_id):
 def annotate_image(request, image_id):
     image = user_image.objects.get(id=image_id)
     return render(request, 'annotate_image.html', {'image': image})
+
+def page(request):
+    return render(request, '1.html')
+
+def page2(request):
+    return render(request, '01.html')
