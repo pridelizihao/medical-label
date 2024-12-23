@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse  
 from django.views.decorators.http import require_http_methods
-from.models import label, rectdata, polygondata, circledata
+from.models import label, rectdata, polygondata, circledata, pencildata
 
 # Create your views here.
 def coordinate_data(request):
@@ -59,6 +59,22 @@ def polygonjsonndata(request):
     else:
         return HttpResponse("error")
 
+def penciljsondata(request):
+    if request.is_json():
+        data = request.get_json()
+        # do something with the data
+        for i in data:
+            pencil = pencildata(
+                image_name=i['image_name'],
+                text=i['text'],
+                x=i['x'],
+                y=i['y'],
+                label_id=i['label_id']
+            )
+            pencil.save()
+        return HttpResponse("success")
+    else:
+        return HttpResponse("error")
     
 def label_list(request):
     labels = label.objects.all()

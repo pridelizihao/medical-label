@@ -176,8 +176,10 @@
         </div>
 
     </div>
-    
+    <form action="{% url 'app01:save_annotation1' image.id %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
         <button style="margin-left:20px;margin-top:0px"  onclick="sendjsondata()" class="btn btn-success"> <i class="fas fa-save"></i> 保存</button>
+    </form>
     </div>
 
     <div style="margin-left:0px"><br>
@@ -265,16 +267,16 @@
       if(flag==0){
           for (let i=0;i<inputs.length;i++){
               rectangles[i].text=inputs[i].value;
-              rectangles[i].image_name="{{images}}";
+              rectangles[i].image_name="{{image.name}}";
           }
           $.ajax({
-                      url:'/rectjsondata',
+                      url:'{{rectjsondata_url}}',
                       type:'POST',
                       contentType:'application/json',
                       data:JSON.stringify(rectangles),
                       success:function(){
                           alert('成功保存');
-                          window.location.href = '/annotated_images_ku';
+                          window.location.href = '/image_is_labeled';
                       }
           })
       }

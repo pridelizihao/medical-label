@@ -10,6 +10,7 @@ from django.contrib import messages
 import os
 from django.db import transaction
 import datetime
+import annotation
 
 
 @login_required
@@ -138,7 +139,15 @@ def delete_image(request, image_id):
 @login_required
 def annotate_image(request, image_id):
     image = user_image.objects.get(id=image_id)
-    return render(request, 'annotate_image.html', {'image': image})
+    return render(request, 'annotate_image.html', {'image': image,})
+
+@login_required
+def save_annotation1(request, image_id):
+    image = user_image.objects.get(id=image_id)
+    image.islabeled = True
+    image.time = datetime.datetime.now()
+    image.save()
+    return render(request,"annotate_image.html", {'image': image,})
 
 def page(request):
     return render(request, '1.html')

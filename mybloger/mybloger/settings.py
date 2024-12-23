@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     "blog",
     "author",
     "app01",
-    "annotation"
+    "annotation",
 ]
 
 MIDDLEWARE = [

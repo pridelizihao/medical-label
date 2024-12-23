@@ -160,8 +160,13 @@
         </div>
     </div>
 
-    <divb >
-        <div> 已上传图片</div>
+    <div>
+        {% if images.count == 0 %}
+        <div style="margin-left: 420px; margin-top: 80px;">
+            <h1>暂无图片</h1>
+        </div>
+        {% endif %}
+        <div style="margin-left: 420px; margin-top: 80px;"> <h1>已上传图片<h1></div>
 
         {% for image in images %}
         <div style="margin-left: 420px; margin-top: 80px; display: flex; flex-wrap: wrap; gap: 10px;">
@@ -188,7 +193,7 @@
             {% csrf_token %}
             <button class="btn btn-danger" style="width:250px;height:40px"><i class="fas fa-trash-alt" onclick="delete_Image()"></i>删除</button>
         </form>
-    </div>
+    
     {% endfor %}
     </div>
 
