@@ -154,3 +154,6 @@ def page(request):
 
 def page2(request):
     return render(request, '01.html')
+
+
+
