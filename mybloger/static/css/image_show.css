@@ -1,0 +1,50 @@
+        .image-container {
+            margin-left:250px;
+            display: flex;
+            flex-wrap: wrap; /* 图片容器换行 */
+            justify-content: flex-start; /* 图片水平居左 */
+            align-items: flex-start; /* 图片垂直顶部对齐 */
+            padding: 20px;
+        }
+
+        .image-item {
+            width: 200px;
+            height: 200px;
+            margin: 10px; /* 图片间隔 */
+            overflow: hidden;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .image-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-item:hover {
+            transform: scale(1.05);
+        }
+
+        .fullscreen-img {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+        }
+
+        .fullscreen-img.active {
+            display: flex;
+        }
+
+        .fullscreen-img img {
+            max-width: 90%;
+            max-height: 90%;
+        }

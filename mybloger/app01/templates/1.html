@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>医学平台标注</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link href="https://cdn.staticfile.net/twitter-bootstrap/5.1.1/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.staticfile.net/twitter-bootstrap/5.1.1/js/bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- 引入jQuery库 -->
+  <style>
+    .button-container {
+      display: flex;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      /* 使用相对定位，以便子元素可以根据此容器进行定位 */
+      position: relative;
+    }
+
+    .not-frame {
+      flex: 1;
+      height: 5rem;
+      font-size: 14px;
+      margin: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 5rem;
+      background-color: crimson;
+    }
+
+    .litlesize {
+      height: 4rem;
+      width: 3rem;
+    }
+
+
+
+    .haveframe {
+      /* 按钮在弹性容器中占据剩余空间 */
+      height: 5rem;
+      width: 5rem;
+      font-size: 16px;
+      background-color: white;
+    }
+
+    /* 文件夹文字后有一竖线 */
+    .folder-line {
+      position: relative;
+      display: inline-block;
+      align-items: flex-start;
+    }
+
+    .folder-line span {
+      margin-right: 5rem;
+      /* 让文件夹和竖线之间有间隙 */
+    }
+
+    .folder-line::after {
+      content: "";
+      width: 1px;
+      height: 100vh;
+      background-color: black;
+      position: absolute;
+      top: -5px;
+      /* 向上调整一点，与上方文字更紧密 */
+      left: 100%;
+    }
+
+
+    /* 拖入图片 */
+    .plus-sign {
+      font-size: 10rem;
+      font-weight: 50;
+    }
+
+    /* 文件按钮点击后显示按钮 */
+    .file-options {
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      padding: 10px;
+      position: absolute;
+      top: 100px;
+      left: 0;
+      display: none;
+    }
+
+    /* 自动标注按钮点击后显示按钮 */
+    .auto-options {
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      padding: 10px;
+      position: absolute;
+      top: 100px;
+      left: 25%;
+      display: none;
+    }
+
+    .transfer-options {
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      padding: 10px;
+      position: absolute;
+      top: 100px;
+      left: 37%;
+      display: none;
+    }
+
+    #fileInput {
+      display: none;
+    }
+
+
+
+    /* 设置图片放置区域和画布的布局样式，让画布覆盖在图片放置区域之上 */
+    .image-container {
+      position: relative;
+      width: 1250px;
+      height: 1000px;
+      margin: 0 auto;
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      /* 设置较高的z-index值确保画布在上面 */
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="button-container" style="display:flex;justify-content:flex-start;">
+    <div style="display:flex;">
+      <button class="not-frame file-button">文件</button>
+      <button class="not-frame">工具</button>
+      <button class="not-frame auto-button">自动标注</button>
+      <button class="not-frame transfer-button">云端</button>
+      <button class="not-frame">编辑</button>
+      <button class="not-frame">窗口</button>
+      <button class="not-frame">关闭</button>
+      <button class="not-frame">帮助</button>
+      <button class="not-frame">视图</button>
+      <button class="not-frame">测量</button>
+    </div>
+  </div>
+
+  <hr>
+  <div style="display: flex">
+    <div>
+      <div style="margin-left: 20px" id="inputcontainer">
+        <div class="container" style="margin-left: 0px">
+          <p>
+          <h3 style="color: white">请输入标注文本</h3>
+          </p>
+        </div>
+      </div>
+      <button style="margin-left: 20px" onclick="sendjsondata()" class="btn btn-success"> <i class="fas fa-save"></i>
+        保存</button>
+    </div>
+    <div style="margin-left: 0px; text-align: center"><br>
+      <button onclick="flag0()" class="" style="margin-left: 0px; width: 100px"><i></i> 矩形</button>
+      <button onclick="flag1()" class="" style="margin-left: 0px; width: 100px"><i></i>
+        多边形</button>
+      <button onclick="flag2()" class="" style="margin-left: 0px; width: 100px"><i></i> 圆形</button>
+      <button onclick="flag3()" class="" style="margin-left: 0px; width: 100px"><i></i> 自由曲线</button>
+
+      <button onclick="clearannotation()" class=""><i class="fas fa-trash-alt"></i>
+        清除标注</button>
+        
+    </div>
+  </div>
+  <div class="image-container">
+    <canvas id="myCanvas" width="1250" height="1000" style="border: 1px solid #000000;"></canvas>
+    <img id="annotationImage" src="D:\个人所得\基于视觉大模型的医学图像标注平台\平台\mybloger\static\images\001.jpg" alt="Annotation Image">
+  </div>
+
+  
+  <hr>
+
+
+
+  <!-- 隐藏的文件输入元素 -->
+  <input type="file" id="fileInput" multiple accept="image/*">
+
+  <script>
+    // 根据设备宽度计算html标签的font-size值
+    function resetHtmlFontsize() {
+      document.documentElement.style.fontSizes = screen.width / 10 + 'px'
+    }
+    resetHtmlFontsize()
+    window.onresize = resetHtmlFontsize;
+    // 文件按钮点击后显示新建打开保存另存为的选项
+    const fileButton = document.querySelector('.file-button');
+    const fileOptions = document.createElement('div');
+    fileOptions.classList.add('file-options');
+    fileOptions.innerHTML = `
+      <button>新建</button>
+      <br>
+     <button class="open-button">打开</button>
+      <br>
+      <button>保存</button>
+      <br>
+      <button>另存为</button>
+      <br>
+    `;
+    // 将选项容器添加到 body 中
+    document.body.appendChild(fileOptions);
+
+    // 点击文件按钮显示或隐藏选项
+    fileButton.addEventListener('click', () => {
+      if (fileOptions.style.display === 'none') {
+        fileOptions.style.display = 'block';
+      } else {
+        fileOptions.style.display = 'none';
+      }
+    });
+    // 自动标注按钮点击后显示标注病变部位，标注健康部位的按钮
+    const autoButton = document.querySelector('.auto-button');
+    const autoOptions = document.createElement('div');
+    autoOptions.classList.add('auto-options');
+    autoOptions.innerHTML = `
+      <button>标注健康部位</button>
+      <br>
+      <button>标注病变部位</button>
+      <br>
+    `;
+
+    // 将选项容器添加到 body 中
+    document.body.appendChild(autoOptions);
+
+    // 点击自动标注按钮按钮显示或隐藏选项
+    autoButton.addEventListener('click', () => {
+      if (autoOptions.style.display === 'none') {
+        autoOptions.style.display = 'block';
+      } else {
+        autoOptions.style.display = 'none';
+      }
+    });
+    // 云端按钮点击后显示的按钮
+    const transferButton = document.querySelector('.transfer-button');
+    const transferOptions = document.createElement('div');
+    transferOptions.classList.add('transfer-options');
+    transferOptions.innerHTML = `
+      <button>接收文件</button>
+      <br>
+      <button>上传文件</button>
+      <br>
+      <button>传输文件给</button>
+    `;
+
+    // 将选项容器添加到 body 中
+    document.body.appendChild(transferOptions);
+    // 点击自动标注按钮按钮显示或隐藏选项
+    transferButton.addEventListener('click', () => {
+      if (transferOptions.style.display === 'none') {
+        transferOptions.style.display = 'block';
+      } else {
+        transferOptions.style.display = 'none';
+      }
+    });
+
+    var canvas = document.getElementById('myCanvas');
+    var ctx = canvas.getContext('2d');
+    var rectangles = [];
+    var isDragging = false;
+    var currentRect = { startX: 0, startY: 0, endX: 0, endY: 0, text: "", image_name: "" };
+    var points = [];
+    var flag = 0;    //0 rect  1 polygon
+    var polygon = [];
+    var circle = [];
+    var currentCircle = { X: 0, Y: 0, R: 0, text: "", image_name: "" };
+    var pencil = [];
+    var pencil_points = [];
+
+
+    // 获取要插入输入框的容器
+    const container = document.getElementById('inputcontainer');
+
+    // 为数组中的每个元素创建一个输入框并添加到容器中
+    function addinput() {
+      const input = document.createElement('input');
+      input.type = 'text';
+      container.appendChild(input);
+      container.appendChild(document.createElement('br')); // 添加换行
+      container.appendChild(document.createElement('br')); // 添加换行
+    }
+
+
+    var img = new Image();
+    img.src = "撤回符号.png";
+    scaledrawimage();
+
+
+
+    window.onload = function () {
+      // 页面加载完成后的代码
+
+      scaledrawimage();
+    };
+
+
+
+    function flag0() {
+      flag = 0;
+    }
+
+
+    function flag1() {
+      flag = 1;
+
+    }
+
+    function flag2() {
+      flag = 2;
+
+    }
+
+    function flag3() {
+      flag = 3;
+
+    }
+
+
+    function sendjsondata() {
+      var inputs = document.getElementsByTagName('input');
+      if (flag == 0) {
+        for (let i = 0; i < inputs.length; i++) {
+          rectangles[i].text = inputs[i].value;
+          rectangles[i].image_name = "{{images}}";
+        }
+        $.ajax({
+          url: '/rectjsondata',
+          type: 'POST',
+          contentType: 'application/json',
+          data: JSON.stringify(rectangles),
+          success: function () {
+            alert('成功保存');
+            window.location.href = '/annotated_images_ku';
+          }
+        })
+      }
+      if (flag == 1) {
+        for (let i = 0; i < inputs.length; i++) {
+          polygon[i].text = inputs[i].value;
+        }
+        $.ajax({
+          url: '/polygonjsondata',
+          type: 'POST',
+          contentType: 'application/json',
+          data: JSON.stringify(polygon),
+          success: function () {
+            alert('成功保存');
+            window.location.href = '/annotated_images_ku';
+          }
+        })
+      }
+      if (flag == 2) {
+        for (let i = 0; i < inputs.length; i++) {
+          circle[i].text = inputs[i].value;
+          circle[i].image_name = "{{images}}";
+        }
+        $.ajax({
+          url: '/circlejsondata',
+          type: 'POST',
+          contentType: 'application/json',
+          data: JSON.stringify(circle),
+          success: function () {
+            alert('成功保存');
+            window.location.href = '/annotated_images_ku';
+          }
+        })
+      }
+
+      if (flag == 3) {
+        for (let i = 0; i < inputs.length; i++) {
+          pencil[i].text = inputs[i].value;
+        }
+        $.ajax({
+          url: '/penciljsondata',
+          type: 'POST',
+          contentType: 'application/json',
+          data: JSON.stringify(pencil),
+          success: function () {
+            alert('成功保存');
+            window.location.href = '/annotated_images_ku';
+          }
+        })
+
+      }
+    };
+
+
+    canvas.addEventListener('mousedown', function (e) {
+      isDragging = true;
+      if (flag == 0) {
+        currentRect.startX = e.offsetX;
+        currentRect.startY = e.offsetY;
+      }
+      if (flag == 1) {
+        var currentpoints = { X: 0, Y: 0 };
+        currentpoints.X = e.offsetX;
+        currentpoints.Y = e.offsetY;
+        points.push(currentpoints);
+      }
+      if (flag == 2) {
+        isDragging = true;
+        var rect = canvas.getBoundingClientRect();
+        currentCircle.X = event.clientX - rect.left;
+        currentCircle.Y = event.clientY - rect.top;
+
+      }
+      if (flag == 3) {
+        isDragging = true;
+        // 记录鼠标按下的位置
+        var startX = e.offsetX;
+        var startY = e.offsetY;
+
+        // 绘制路径起始点
+        ctx.beginPath();
+        ctx.moveTo(startX, startY);
+        pencil_points.push({ x: startX, y: startY });
+
+      }
+    });
+
+    canvas.addEventListener('mousemove', function (e) {
+      if (isDragging) {
+        if (flag == 0) {
+          currentRect.endX = e.offsetX;
+          currentRect.endY = e.offsetY;
+          draw();
+
+        }
+        if (flag == 1) {
+          //draw();
+
+
+        }
+        if (flag == 2) {
+          var rect = canvas.getBoundingClientRect();
+          currentCircle.R = Math.sqrt(Math.pow(event.clientX - rect.left - currentCircle.X, 2) + Math.pow(event.clientY - rect.top - currentCircle.Y, 2));
+          redrawCanvas();
+          drawCircle(currentCircle.X, currentCircle.Y, currentCircle.R);
+
+
+        }
+        if (flag == 3) {
+          var x = e.offsetX;
+          var y = e.offsetY;
+
+          // 绘制路径
+          ctx.lineTo(x, y);
+          ctx.stroke();
+
+          // 将绘制的点保存到笔画轨迹数据中
+          pencil_points.push({ x: x, y: y });
+
+        }
+
+
+      }
+    });
+
+    canvas.addEventListener('mouseup', function (e) {
+      isDragging = false;
+      if (flag == 0) {
+        // 当鼠标释放时，将当前矩形添加到矩形数组中
+        rectangles.push(currentRect);
+        currentRect = { startX: 0, startY: 0, endX: 0, endY: 0 }; // 重置当前矩形对象
+        draw();
+        addinput();
+      }
+      if (flag == 1) {
+        var currentpoints = { X: 0, Y: 0 };
+        currentpoints.X = e.offsetX;
+        currentpoints.Y = e.offsetY;
+        points.push(currentpoints);
+        ctx.beginPath();
+        ctx.moveTo(points[0].X, points[0].Y);
+        for (var i = 1; i < points.length; i++) {
+          ctx.lineTo(points[i].X, points[i].Y);
+        }
+
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#000000';
+        ctx.stroke();
+      }
+      if (flag == 2) {
+        isDragging = false;
+        // 将当前圆添加到数组中
+        circle.push({
+          X: currentCircle.X,
+          Y: currentCircle.Y,
+          R: currentCircle.R,
+          text: currentCircle.text,
+          image_name: currentCircle.image_name
+        });
+        // 重置当前圆
+        currentCircle = { X: 0, Y: 0, R: 0, text: "", image_name: "" };
+        redrawCanvas();
+        addinput();
+
+      }
+      if (flag == 3) {
+        ctx.beginPath();
+        ctx.moveTo(pencil_points[0].x, pencil_points[0].y);
+        for (var i = 1; i < pencil_points.length; i++) {
+          ctx.lineTo(pencil_points[i].x, pencil_points[i].y);
+        }
+        ctx.closePath();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#000000';
+        ctx.stroke();
+        var temp = [];
+        for (var i = 0; i < pencil_points.length; i++) {
+          temp.push({ x: pencil_points[i].x, y: pencil_points[i].y });
+        }
+        pencil.push({ points: temp, text: '', image_name: '{{images}}' });
+        addinput();
+        pencil_points.length = 0;
+      }
+
+    });
+
+    canvas.addEventListener('dblclick', function (e) {
+      if (flag == 1) {
+        draw();
+        addinput();
+        var currentpolygon = { points: [], text: "", image_name: "" };
+        currentpolygon.points = points;
+        currentpolygon.image_name = '{{images}}';
+        polygon.push(currentpolygon);
+        console.log(polygon)
+        points = [];
+      }
+
+    });
+
+
+    function redrawCanvas() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      scaledrawimage();
+      // 绘制之前保存的所有圆
+      circle.forEach(function (circleData) {
+        drawCircle(circleData.X, circleData.Y, circleData.R);
+      });
+    }
+
+
+
+    function drawCircle(x, y, r) {
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, 2 * Math.PI);
+      ctx.stroke();
+    }
+
+
+
+    function draw() {
+      if (flag == 0) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        scaledrawimage();
+        rectangles.forEach(function (rect) {
+          ctx.beginPath();
+          ctx.rect(rect.startX, rect.startY, rect.endX - rect.startX, rect.endY - rect.startY);
+          ctx.strokeStyle = 'black';
+          ctx.stroke();
+        });
+
+        // 如果正在拖动，也绘制当前矩形（半透明）
+        if (isDragging) {
+          ctx.beginPath();
+          ctx.rect(Math.min(currentRect.startX, currentRect.endX), Math.min(currentRect.startY, currentRect.endY), Math.abs(currentRect.endX - currentRect.startX), Math.abs(currentRect.endY - currentRect.startY));
+          ctx.strokeStyle = 'black';
+          ctx.stroke();
+        }
+
+
+      }
+      if (flag == 1) {
+        ctx.beginPath();
+        ctx.moveTo(points[0].X, points[0].Y);
+        for (var i = 1; i < points.length; i++) {
+          ctx.lineTo(points[i].X, points[i].Y);
+        }
+
+        ctx.closePath();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#000000';
+        ctx.stroke();
+
+      }
+
+    }
+
+    function clearannotation() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      rectangles.length = 0;
+      while (container.firstChild) {
+        container.removeChild(container.firstChild);
+      }
+      container.innerHTML = "请输入标注文本</br>";
+      points.length = 0;
+      scaledrawimage();
+    }
+
+
+    function scaledrawimage() {
+      var scale = Math.min(canvas.width / img.width, canvas.height / img.height);
+      // 计算绘制的宽度和高度
+      var drawWidth = img.width * scale;
+      var drawHeight = img.height * scale;
+      // 计算绘制的起始坐标使图片居中
+      var x = (canvas.width - drawWidth) / 2;
+      var y = (canvas.height - drawHeight) / 2;
+      // 绘制图片
+      if (img.width > img.height) {
+        ctx.drawImage(img, x + 150, y, drawWidth, drawHeight);
+      }
+      else {
+        ctx.drawImage(img, x, y, drawWidth, drawHeight);
+      }
+    }
+
+    //将图片绘制在画布上
+    function drawimage(img) {
+      var scale = Math.min(canvas.width / img.width, canvas.height / img.height);
+      // 计算绘制的宽度和高度
+      var drawWidth = img.width * scale;
+      var drawHeight = img.height * scale;
+      // 计算绘制的起始坐标使图片居中
+      var x = (canvas.width - drawWidth) / 2;
+      var y = (canvas.height - drawHeight) / 2;
+      // 绘制图片
+      if (img.width > img.height) {
+        ctx.drawImage(img, x + 150, y, drawWidth, drawHeight);
+      }
+      else {
+        ctx.drawImage(img, x, y, drawWidth, drawHeight);
+      }
+    }
+
+  </script>
+
+
+</html>

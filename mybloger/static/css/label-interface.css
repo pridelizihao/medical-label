@@ -1,0 +1,181 @@
+.button-container {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    /* 使用相对定位，以便子元素可以根据此容器进行定位 */
+    position: relative;
+}
+
+.not-frame {
+    flex: 1;
+    height: 5rem;
+    font-size: 14px;
+    margin: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 5rem;
+    background-color: rgb(232, 31, 31);
+}
+
+.litlesize {
+    height: 4rem;
+    width: 3rem;
+}
+
+
+
+
+.haveframe {
+    /* 按钮在弹性容器中占据剩余空间 */
+    height: 5rem;
+    width: 5rem;
+    font-size: 16px;
+    background-color: white;
+}
+
+/* 文件夹文字后有一竖线 */
+.folder-line {
+    position: relative;
+    display: inline-block;
+    align-items: flex-start;
+}
+
+.folder-line span {
+    margin-right: 5rem;
+    /* 让文件夹和竖线之间有间隙 */
+}
+
+.folder-line::after {
+    content: "";
+    width: 1px;
+    height: 100vh;
+    background-color: black;
+    position: absolute;
+    top: -5px;
+    /* 向上调整一点，与上方文字更紧密 */
+    left: 100%;
+}
+
+/* 拖入图片的长方形框架 */
+.dashed-box {
+    border: 2px dashed black;
+    width: 60rem;
+    height: 50rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 40%;
+    left: calc(35% + 10px);
+    /* 调整这个值来控制与竖线的间距 */
+}
+
+/* 拖入图片 */
+.plus-sign {
+    font-size: 10rem;
+    font-weight: 50;
+}
+
+/* 文件按钮点击后显示按钮 */
+.file-options {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 10px;
+    position: absolute;
+    top: 100px;
+    left: 0;
+    display: none;
+}
+
+/* 自动标注按钮点击后显示按钮 */
+.auto-options {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 10px;
+    position: absolute;
+    top: 100px;
+    left: 25%;
+    display: none;
+}
+
+.transfer-options {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 10px;
+    position: absolute;
+    top: 100px;
+    left: 37%;
+    display: none;
+}
+
+#fileInput {
+    display: none;
+}
+
+#images-container {
+    position: absolute;
+    top: 15rem;
+    left: 10%;
+    /* 竖线的位置 */
+    width: 90rem;
+    /* 根据需要调整宽度 */
+    height: 90vh;
+    /* 根据需要调整高度 */
+    overflow: auto;
+    /* 如果内容超出高度，显示滚动条 */
+    background-color: #f0f0f0;
+    /* 背景颜色 */
+}
+
+img {
+    max-width: 100%;
+    /* 图片宽度自适应 */
+    display: block
+        /* 图片宽度自适应 */
+}
+
+.soochow {
+    top: 0;
+    left: 80%;
+    width: 10rem;
+    height: auto;
+    position: absolute;
+    /* 调整位置 */
+    z-index: 1;
+}
+
+/* 在你的CSS文件或<style>标签中 */
+.button-left-margin {
+    margin-left: 20px;
+}
+
+#drawCanvas {
+    width: 800px;
+    /* 或者你想要的宽度 */
+    height: 600px;
+    /* 或者你想要的高度 */
+    border: 1px solid white;
+}
+
+.ellipse-overlay {
+    position: absolute;
+    border: 2px dashed blue;
+    pointer-events: none;
+}
+
+/* 覆盖层，用于绘制长方形 */
+.rectangle-overlay {
+    position: absolute;
+    border: 2px dashed red;
+    pointer-events: none;
+}
+
+/* 覆盖层，用于绘制椭圆 */
+.ellipse-overlay {
+    position: absolute;
+    border: 2px dashed blue;
+    pointer-events: none;
+}
+
+/* 这里的CSS样式确保画布容器（div）在页面上居中，并且有一个固定的宽高 */
