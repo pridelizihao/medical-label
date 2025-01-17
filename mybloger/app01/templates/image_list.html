@@ -182,7 +182,7 @@
         </div>
         <div style="margin-left:28%;display:flex;margin-top: 20px;">
             <!-- 模型标注按钮 -->
-            <button class="btn btn-info" style="width:120px;height:40px" onclick="alert('模型标注功能暂未开放，敬请期待')"><i
+            <button class="btn btn-info" style="width:120px;height:40px" onclick="openModelAnnotationModal('{{ image.id }}')"><i
                     class="fas fa-desktop"></i> 模型标注</button>
             <form style="margin-left:10px" method="post" action="{% url 'app01:annotate_image' image.id %}">
                 {% csrf_token %}
@@ -195,6 +195,34 @@
         </form>
     
     {% endfor %}
+    </div>
+
+
+    <div class="modal" tabindex="-1" role="dialog" id="modelAnnotationModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">确认操作</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>请选择模型标注选项：</p>
+                    <select class="form-control">
+                        <option>YOLOv8</option>
+                        <option>YOLO9000</option>
+                        <option>YOLOv4</option>
+                    </select>
+                </div>
+    
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="confirmModelAnnotationBtn">确认</button>
+                </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 
@@ -215,6 +243,20 @@
                 return false;
             }
         }
+
+
+
+        function openModelAnnotationModal(id) {
+        // 设置模态框的确认按钮点击事件
+        document.getElementById('confirmModelAnnotationBtn').addEventListener('click', function () {
+            // 执行模型标注的路由操作
+            window.location.href = '/app01/annotate_image_model/' + id;
+        });
+
+        // 显示模态框
+        var modal = new bootstrap.Modal(document.getElementById('modelAnnotationModal'));
+        modal.show();
+    }
     </script>
 </body>
 

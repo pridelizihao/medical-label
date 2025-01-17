@@ -144,6 +144,11 @@ def annotate_image(request, image_id):
     return render(request, 'annotate_image.html', {'image': image,})
 
 @login_required
+def annotate_image_model(request, image_id):
+    image = user_image.objects.get(id=image_id)
+    return render(request, 'annotate_image_model.html', {'image': image,})
+
+@login_required
 def save_annotation1(request, image_id):
     image = user_image.objects.get(id=image_id)
     image.islabeled = True

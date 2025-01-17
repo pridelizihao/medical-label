@@ -18,6 +18,7 @@ urlpatterns = [
     path("image_is_labeled/",views.image_labeled, name="image_is_labeled"),
     path("image_is_ailabeled/",views.image_ailabeled, name="image_is_ailabeled"),
     path("annotate_image/<int:image_id>/",views.annotate_image, name="annotate_image"),
+    path("annotate_image_model/<int:image_id>/",views.annotate_image_model, name="annotate_image_model"),
     path("save_annotation1/<int:image_id>/",views.save_annotation1, name="save_annotation1"),
     path("01/",views.page, name="01"),
     path("02/",views.page2, name="02"),
