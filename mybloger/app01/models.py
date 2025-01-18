@@ -6,6 +6,7 @@ from django.utils import timezone
 
 
 
+
 class user_image(models.Model):
     name = models.CharField(max_length=100)  # 产品名称字段，示例，可根据实际修改
     author = models.CharField(max_length=100, default='admin')  # 作者字段，示例
