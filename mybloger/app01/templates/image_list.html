@@ -217,7 +217,7 @@
                 </div>
     
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-secondary" id="cancelModelAnnotationBtn">取消</button>
                     <button type="button" class="btn btn-primary" id="confirmModelAnnotationBtn">确认</button>
                 </div>
                 </div>
@@ -256,6 +256,12 @@
         // 显示模态框
         var modal = new bootstrap.Modal(document.getElementById('modelAnnotationModal'));
         modal.show();
+
+        // 设置模态框的取消按钮点击事件
+        document.getElementById('cancelModelAnnotationBtn').addEventListener('click', function () {
+            // 关闭模态框
+            modal.hide();
+        });
     }
     </script>
 </body>
