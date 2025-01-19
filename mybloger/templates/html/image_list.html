@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>base64图片张氏</title>
+</head>
+<body>
+    <h2>图片列表</h2>
+    <ul>
+        {% for image in images %}
+            <li>
+                <h3>{{ image.title }}</h3>
+                <img src="data:image/jpeg;base64,{{ image.image_data }}" alt="{{ image.title }}">
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

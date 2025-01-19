@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>未标注图片</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+        /* 侧边栏样式 */
+        .sidebar {
+            background-color: #f8f9fa;
+            height: 100vh;
+            width: 280px;
+            transition: width 0.3s ease;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 10;
+        }
+
+        /* 侧边栏链接样式 */
+        .sidebar a {
+            color: #333;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            display: block;
+            padding: 15px 20px;
+            /* 增加上下和左右的内边距，以扩大间距 */
+            margin-bottom: 5px;
+            /* 增加每个链接之间的下边距 */
+        }
+
+        .sidebar a:hover {
+            background-color: #e9ecef;
+            color: #007bff;
+        }
+
+        /* 激活的链接样式 */
+        .sidebar a.active {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        /* 头像和用户名容器样式 */
+        .user-info {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .user-info:hover {
+            background-color: #e9ecef;
+        }
+
+        /* 头像样式 */
+        .user-info img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin-right: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .user-info:hover img {
+            transform: scale(1.1);
+        }
+
+        /* 下拉菜单样式 */
+        .dropdown-menu {
+            animation: dropdownAnimation 0.3s ease;
+        }
+
+        .card-group {
+            margin-top: 20px;
+            margin-left: 5%;
+            display: flex;
+            margin-right: 20%;
+        }
+
+        @keyframes dropdownAnimation {
+            0% {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="d-flex flex-column flex-shrink-0 p-3 bg-light sidebar" style="width: 280px;">
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item">
+                <a href="{% url 'app01:home' %}" class="nav-link active" aria-current="page">
+                    <svg class="bi pe-none me-2" width="16" height="16">
+                        <use xlink:href="#home"></use>
+                    </svg>
+                    首页
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'app01:upload_image' %}" class="nav-link link-dark">
+                    <svg class="bi pe-none me-2" width="16" height="16">
+                        <use xlink:href="#speedometer2"></use>
+                    </svg>
+                    上传图片或文件夹
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'app01:image_list' %}" class="nav-link link-dark">
+                    <svg class="bi pe-none me-2" width="16" height="16">
+                        <use xlink:href="#table"></use>
+                    </svg>
+                    未标注图片
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'app01:image_is_labeled' %}" class="nav-link link-dark">
+                    <svg class="bi pe-none me-2" width="16" height="16">
+                        <use xlink:href="#grid"></use>
+                    </svg>
+                    人工标注图片
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'app01:image_is_ailabeled' %}" class="nav-link link-dark">
+                    <svg class="bi pe-none me-2" width="16" height="16">
+                        <use xlink:href="#people-circle"></use>
+                    </svg>
+                    模型标注图片
+                </a>
+            </li>
+        </ul>
+        <hr>
+
+        <div class="dropdown">
+            <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle user-info"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                <strong>{{ user.username }}</strong>
+            </a>
+            <ul class="dropdown-menu text-small shadow">
+                <li><a class="dropdown-item" href="#">New project...</a></li>
+                <li><a class="dropdown-item" href="#">Settings</a></li>
+                <li><a class="dropdown-item" href="{% url 'app01:profile' %}">Profile</a></li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a href="{% url 'author:logout' %}" class="dropdown-item" href="#">Sign out</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div>
+        {% if images.count == 0 %}
+        <div style="margin-left: 420px; margin-top: 80px;">
+            <h1>暂无图片</h1>
+        </div>
+        {% endif %}
+        <div style="margin-left: 420px; margin-top: 80px;"> <h1>已上传图片<h1></div>
+
+        {% for image in images %}
+        <div style="margin-left: 420px; margin-top: 80px; display: flex; flex-wrap: wrap; gap: 10px;">
+            <div class="card" style="width: 30%; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
+                <img src="{{ image.image.url }}" class="card-img-top" style="width: 100%; height: auto;"
+                    alt="{{ image.name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ image.name }}</h5>
+                    <p class="card-text">Card text</p>
+                    <p class="card-text"><small class="text-muted">{{ image.time }}</small></p>
+                </div>
+            </div>
+        </div>
+        <div style="margin-left:28%;display:flex;margin-top: 20px;">
+            <!-- 模型标注按钮 -->
+            <button class="btn btn-info" style="width:120px;height:40px" onclick="openModelAnnotationModal('{{ image.id }}')"><i
+                    class="fas fa-desktop"></i> 模型标注</button>
+            <form style="margin-left:10px" method="post" action="{% url 'app01:annotate_image' image.id %}">
+                {% csrf_token %}
+                <button class="btn btn-info" style="width:120px;height:40px"><i class="fas fa-tools"></i>人工标注</button>
+            </form>
+        </div>
+        <form style="margin-left:28%;margin-top:10px;" method="post" action="{% url 'app01:delete_image' image.id %}">
+            {% csrf_token %}
+            <button class="btn btn-danger" style="width:250px;height:40px"><i class="fas fa-trash-alt" onclick="delete_Image()"></i>删除</button>
+        </form>
+    
+    {% endfor %}
+    </div>
+
+
+    <div class="modal" tabindex="-1" role="dialog" id="modelAnnotationModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">确认操作</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>请选择模型标注选项：</p>
+                    <select class="form-control">
+                        <option>sam_vit_b_01ec64</option>
+                        <option>sam_vit_h_4b8939</option>
+                        <option>sam_vit_l_0b3195</option>
+                    </select>
+                </div>
+    
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancelModelAnnotationBtn">取消</button>
+                    <button type="button" class="btn btn-primary" id="confirmModelAnnotationBtn">确认</button>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // 当页面加载时，为侧边栏链接添加点击事件处理
+        $(document).ready(function () {
+            $('.sidebar a').on('click', function () {
+                 // 移除所有链接的 active 类
+                 $('.sidebar a').removeClass('active');
+                // 为当前点击的链接添加 active 类
+                $(this).addClass('active');
+            });
+        });
+        function delete_Image() {
+            if (confirm("确定要删除吗？")) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+
+
+        function openModelAnnotationModal(id) {
+        // 设置模态框的确认按钮点击事件
+        document.getElementById('confirmModelAnnotationBtn').addEventListener('click', function () {
+            // 执行模型标注的路由操作
+            window.location.href = '/app01/annotate_image_model/' + id;
+        });
+
+        // 显示模态框
+        var modal = new bootstrap.Modal(document.getElementById('modelAnnotationModal'));
+        modal.show();
+
+        // 设置模态框的取消按钮点击事件
+        document.getElementById('cancelModelAnnotationBtn').addEventListener('click', function () {
+            // 关闭模态框
+            modal.hide();
+        });
+    }
+    </script>
+</body>
+
+</html>
