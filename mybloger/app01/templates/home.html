@@ -18,7 +18,7 @@
         }
 
         /* 侧边栏样式 */
-       .sidebar {
+        .sidebar {
             background-color: #f8f9fa;
             height: 100vh;
             width: 280px;
@@ -30,7 +30,7 @@
         }
 
         /* 侧边栏链接样式 */
-       .sidebar a {
+        .sidebar a {
             color: #333;
             transition: background-color 0.3s ease, color 0.3s ease;
             display: block;
@@ -38,31 +38,31 @@
             margin-bottom: 5px;
         }
 
-       .sidebar a:hover {
+        .sidebar a:hover {
             background-color: #e9ecef;
             color: #007bff;
         }
 
         /* 激活的链接样式 */
-       .sidebar a.active {
+        .sidebar a.active {
             background-color: #007bff;
             color: #fff;
         }
 
         /* 头像和用户名容器样式 */
-       .user-info {
+        .user-info {
             display: flex;
             align-items: center;
             padding: 10px;
             transition: background-color 0.3s ease;
         }
 
-       .user-info:hover {
+        .user-info:hover {
             background-color: #e9ecef;
         }
 
         /* 头像样式 */
-       .user-info img {
+        .user-info img {
             width: 32px;
             height: 32px;
             border-radius: 50%;
@@ -70,12 +70,12 @@
             transition: transform 0.3s ease;
         }
 
-       .user-info:hover img {
+        .user-info:hover img {
             transform: scale(1.1);
         }
 
         /* 下拉菜单样式 */
-       .dropdown-menu {
+        .dropdown-menu {
             animation: dropdownAnimation 0.3s ease;
         }
 
@@ -92,14 +92,14 @@
         }
 
         /* 标题容器样式 */
-       .page-title {
+        .page-title {
             margin-left: 280px;
             text-align: center;
             padding-top: 20px;
         }
 
         /* 轮播图容器样式 */
-       .carousel-container {
+        .carousel-container {
             margin-left: 100px;
             margin-top: 20px;
             width: 1200px;
@@ -142,7 +142,7 @@
         }
 
         /* 信息卡片容器样式 */
-       .info-container {
+        .info-container {
             margin-left: 100px;
             margin-top: 40px;
             display: flex;
@@ -151,42 +151,42 @@
         }
 
         /* 图片数量卡片样式 */
-       .image_count.card {
+        .image_count.card {
             margin-bottom: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
             transition: all 0.3s ease;
         }
 
-       .image_count.card:hover {
+        .image_count.card:hover {
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
             transform: translateY(-3px);
         }
 
         /* 最近标注图片容器样式 */
-       .recent-image {
+        .recent-image {
             margin-top: 20px;
             margin-left: 100px;
             text-align: center;
         }
 
-       .recent-image h3 {
+        .recent-image h3 {
             margin-bottom: 10px;
         }
 
-       .recent-image div {
+        .recent-image div {
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
             transition: all 0.3s ease;
         }
 
-       .recent-image div:hover {
+        .recent-image div:hover {
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
             transform: translateY(-3px);
         }
 
         /* 最近标注数据容器样式 */
-       .recent-data {
+        .recent-data {
             margin-left: 50px;
             padding: 70px;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
@@ -194,16 +194,20 @@
             transition: all 0.3s ease;
         }
 
-       .recent-data:hover {
+        .recent-data:hover {
             box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
             transform: translateY(-3px);
         }
     </style>
+
+    <script async defer
+        src="http://localhost:8080/api/application/embed?protocol=http&host=localhost:8080&token=21214db98103b71c">
+        </script>
 </head>
 
 <body>
     <div class="d-flex flex-column flex-shrink-0 p-3 bg-light sidebar" style="width: 280px;">
-       
+
         <ul class="nav nav-pills flex-column mb-auto">
             <li class="nav-item">
                 <a href="{% url 'app01:home' %}" class="nav-link active" aria-current="page">
@@ -302,13 +306,16 @@
         <div class="info-container">
             <div class="image_count">
                 <div class="card bg-gray text-black" style="width: 500px ;margin-top: 20px">
-                    <div class="card-body" style=" color:black">未标注图片：<h4>{{num1}} 张</h4></div>
+                    <div class="card-body" style=" color:black">未标注图片：<h4>{{num1}} 张</h4>
+                    </div>
                 </div>
                 <div class="card bg-gray text-black" style="width: 500px;margin-top: 20px">
-                    <div class="card-body" style=" color:black">模型已标注：<h4>{{num3}} 张</h4></div>
+                    <div class="card-body" style=" color:black">模型已标注：<h4>{{num3}} 张</h4>
+                    </div>
                 </div>
                 <div class="card bg-gray text-black" style="width: 500px;margin-top: 20px">
-                    <div class="card-body" style=" color:black">人工已标注：<h4>{{num2}} 张</h4></div>
+                    <div class="card-body" style=" color:black">人工已标注：<h4>{{num2}} 张</h4>
+                    </div>
                 </div>
             </div>
 
@@ -322,7 +329,7 @@
 
             <div class="recent-data">
                 <h5 style="color: black;margin-left: 90px;writing-mode: horizontal-tb;">最近的标注数据</h3>
-                <div id="jsondata_card"></div>
+                    <div id="jsondata_card"></div>
             </div>
         </div>
     </div>

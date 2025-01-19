@@ -94,6 +94,10 @@
             }
         }
     </style>
+
+    <script async defer
+        src="http://localhost:8080/api/application/embed?protocol=http&host=localhost:8080&token=21214db98103b71c">
+        </script>
 </head>
 
 <body>
@@ -166,7 +170,9 @@
             <h1>暂无图片</h1>
         </div>
         {% endif %}
-        <div style="margin-left: 420px; margin-top: 80px;"> <h1>已上传图片<h1></div>
+        <div style="margin-left: 420px; margin-top: 80px;">
+            <h1>已上传图片<h1>
+        </div>
 
         {% for image in images %}
         <div style="margin-left: 420px; margin-top: 80px; display: flex; flex-wrap: wrap; gap: 10px;">
@@ -182,8 +188,8 @@
         </div>
         <div style="margin-left:28%;display:flex;margin-top: 20px;">
             <!-- 模型标注按钮 -->
-            <button class="btn btn-info" style="width:120px;height:40px" onclick="openModelAnnotationModal('{{ image.id }}')"><i
-                    class="fas fa-desktop"></i> 模型标注</button>
+            <button class="btn btn-info" style="width:120px;height:40px"
+                onclick="openModelAnnotationModal('{{ image.id }}')"><i class="fas fa-desktop"></i> 模型标注</button>
             <form style="margin-left:10px" method="post" action="{% url 'app01:annotate_image' image.id %}">
                 {% csrf_token %}
                 <button class="btn btn-info" style="width:120px;height:40px"><i class="fas fa-tools"></i>人工标注</button>
@@ -191,10 +197,11 @@
         </div>
         <form style="margin-left:28%;margin-top:10px;" method="post" action="{% url 'app01:delete_image' image.id %}">
             {% csrf_token %}
-            <button class="btn btn-danger" style="width:250px;height:40px"><i class="fas fa-trash-alt" onclick="delete_Image()"></i>删除</button>
+            <button class="btn btn-danger" style="width:250px;height:40px"><i class="fas fa-trash-alt"
+                    onclick="delete_Image()"></i>删除</button>
         </form>
-    
-    {% endfor %}
+
+        {% endfor %}
     </div>
 
 
@@ -215,14 +222,14 @@
                         <option>sam_vit_l_0b3195</option>
                     </select>
                 </div>
-    
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" id="cancelModelAnnotationBtn">取消</button>
                     <button type="button" class="btn btn-primary" id="confirmModelAnnotationBtn">确认</button>
                 </div>
-                </div>
             </div>
         </div>
+    </div>
     </div>
 
 
@@ -230,8 +237,8 @@
         // 当页面加载时，为侧边栏链接添加点击事件处理
         $(document).ready(function () {
             $('.sidebar a').on('click', function () {
-                 // 移除所有链接的 active 类
-                 $('.sidebar a').removeClass('active');
+                // 移除所有链接的 active 类
+                $('.sidebar a').removeClass('active');
                 // 为当前点击的链接添加 active 类
                 $(this).addClass('active');
             });
@@ -247,22 +254,22 @@
 
 
         function openModelAnnotationModal(id) {
-        // 设置模态框的确认按钮点击事件
-        document.getElementById('confirmModelAnnotationBtn').addEventListener('click', function () {
-            // 执行模型标注的路由操作
-            window.location.href = '/app01/annotate_image_model/' + id;
-        });
+            // 设置模态框的确认按钮点击事件
+            document.getElementById('confirmModelAnnotationBtn').addEventListener('click', function () {
+                // 执行模型标注的路由操作
+                window.location.href = '/app01/annotate_image_model/' + id;
+            });
 
-        // 显示模态框
-        var modal = new bootstrap.Modal(document.getElementById('modelAnnotationModal'));
-        modal.show();
+            // 显示模态框
+            var modal = new bootstrap.Modal(document.getElementById('modelAnnotationModal'));
+            modal.show();
 
-        // 设置模态框的取消按钮点击事件
-        document.getElementById('cancelModelAnnotationBtn').addEventListener('click', function () {
-            // 关闭模态框
-            modal.hide();
-        });
-    }
+            // 设置模态框的取消按钮点击事件
+            document.getElementById('cancelModelAnnotationBtn').addEventListener('click', function () {
+                // 关闭模态框
+                modal.hide();
+            });
+        }
     </script>
 </body>
 

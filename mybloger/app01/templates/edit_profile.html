@@ -11,182 +11,186 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <style>
     /* 整体页面容器样式 */
- .profile-page {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 50px 0;
-        min-height: 100vh;
-        background-color: #f4f4f4;
+    .profile-page {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 50px 0;
+      min-height: 100vh;
+      background-color: #f4f4f4;
     }
 
     /* 头像区域样式 */
- .profile-avatar {
-        width: 150px;
-        height: 150px;
-        border-radius: 50%;
-        margin-bottom: 20px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease;
-        object-fit: cover;
+    .profile-avatar {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+      object-fit: cover;
     }
 
- .profile-avatar:hover {
-        transform: scale(1.1);
+    .profile-avatar:hover {
+      transform: scale(1.1);
     }
 
     /* 用户名样式 */
- .profile-username {
-        font-size: 24px;
-        font-weight: bold;
-        margin-bottom: 10px;
-        color: #333;
+    .profile-username {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #333;
     }
 
     /* 个人信息区域样式 */
- .profile-info {
-        width: 50%;
-        text-align: center;
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    .profile-info {
+      width: 50%;
+      text-align: center;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
 
     /* 信息项样式 */
- .profile-info-item {
-        margin-bottom: 15px;
-        font-size: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    .profile-info-item {
+      margin-bottom: 15px;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     /* 编辑按钮样式 */
- .edit-profile-button {
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-        margin-top: 20px;
+    .edit-profile-button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 20px;
     }
 
- .edit-profile-button:hover {
-        background-color: #0056b3;
+    .edit-profile-button:hover {
+      background-color: #0056b3;
     }
 
     /* 编辑模式下的样式 */
- .edit-mode.profile-avatar {
-        border: 2px dashed #ccc;
+    .edit-mode.profile-avatar {
+      border: 2px dashed #ccc;
     }
 
- .edit-mode.profile-info-item {
-        margin-bottom: 25px;
+    .edit-mode.profile-info-item {
+      margin-bottom: 25px;
     }
 
- .edit-mode.profile-info-item input {
-        margin-left: 10px;
-        width: 200px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        padding: 5px;
+    .edit-mode.profile-info-item input {
+      margin-left: 10px;
+      width: 200px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 5px;
     }
 
- .edit-mode.edit-profile-button {
-        display: none;
+    .edit-mode.edit-profile-button {
+      display: none;
     }
 
     /* 头像上传区域样式（编辑模式下显示） */
- .avatar-upload {
-        display: none;
-        margin-top: 10px;
+    .avatar-upload {
+      display: none;
+      margin-top: 10px;
     }
 
- .edit-mode.avatar-upload {
-        display: block;
+    .edit-mode.avatar-upload {
+      display: block;
     }
 
- .avatar-upload input[type="file"] {
-        display: none;
+    .avatar-upload input[type="file"] {
+      display: none;
     }
 
- .avatar-upload label {
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
+    .avatar-upload label {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
     }
 
- .avatar-upload label:hover {
-        background-color: #0056b3;
+    .avatar-upload label:hover {
+      background-color: #0056b3;
     }
 
- .edit-mode.save-button,
- .edit-mode.cancel-button {
-        background-color: #28a745;
-        color: #fff;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        margin-right: 10px;
-        transition: background-color 0.3s ease;
+    .edit-mode.save-button,
+    .edit-mode.cancel-button {
+      background-color: #28a745;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-right: 10px;
+      transition: background-color 0.3s ease;
     }
 
- .edit-mode.save-button:hover {
-        background-color: #218838;
+    .edit-mode.save-button:hover {
+      background-color: #218838;
     }
 
- .edit-mode.cancel-button:hover {
-        background-color: #6c757d;
+    .edit-mode.cancel-button:hover {
+      background-color: #6c757d;
     }
 
     /* 错误提示样式 */
- .error-message {
-        color: red;
-        margin-top: 10px;
+    .error-message {
+      color: red;
+      margin-top: 10px;
     }
 
     /* 确认对话框样式 */
- .confirmation-dialog {
-        display: none;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-        z-index: 9999;
-        text-align: center;
+    .confirmation-dialog {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      z-index: 9999;
+      text-align: center;
     }
 
- .confirmation-dialog h3 {
-        margin-bottom: 15px;
+    .confirmation-dialog h3 {
+      margin-bottom: 15px;
     }
 
- .confirmation-dialog button {
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        margin-right: 10px;
-        transition: background-color 0.3s ease;
+    .confirmation-dialog button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-right: 10px;
+      transition: background-color 0.3s ease;
     }
 
- .confirmation-dialog button:hover {
-        background-color: #0056b3;
+    .confirmation-dialog button:hover {
+      background-color: #0056b3;
     }
   </style>
+
+  <script async defer
+    src="http://localhost:8080/api/application/embed?protocol=http&host=localhost:8080&token=21214db98103b71c">
+    </script>
 </head>
 
 <body>
@@ -197,7 +201,8 @@
     <h1 class="profile-username" id="profileUsername">{{ user_profile.name }}</h1>
     <!-- 个人信息 -->
     <div class="profile-info">
-      <p class="profile-info-item" id="profileNameItem"><span class="profile-info-label">姓名:</span> {{ user_profile.name }}</p>
+      <p class="profile-info-item" id="profileNameItem"><span class="profile-info-label">姓名:</span> {{ user_profile.name
+        }}</p>
     </div>
     <!-- 编辑按钮 -->
     <button class="edit-profile-button" id="editProfileButton">编辑个人资料</button>
@@ -256,7 +261,7 @@
         $('#editProfileButton').show();
         // 将输入框恢复为文本显示
         let nameInput = $('#profileNameItem input').val();
-        $('#profileNameItem').text('姓名:'+ nameInput);
+        $('#profileNameItem').text('姓名:' + nameInput);
         // 隐藏头像上传区域
         $('#avatarUpload').hide();
       }
@@ -313,7 +318,7 @@
           $('#cancelButton').hide();
           $('#editProfileButton').show();
           $('#profileUsername').text(newName);
-          $('#profileNameItem').text('姓名:'+ newName);
+          $('#profileNameItem').text('姓名:' + newName);
           $('#confirmationDialog').hide();
         },
         error: function (error) {

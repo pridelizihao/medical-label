@@ -12,7 +12,7 @@
 
   <style>
     /* 侧边栏样式 */
-  .sidebar {
+    .sidebar {
       background-color: #f8f9fa;
       height: 100vh;
       width: 280px;
@@ -24,39 +24,41 @@
     }
 
     /* 侧边栏链接样式 */
-  .sidebar a {
+    .sidebar a {
       color: #333;
       transition: background-color 0.3s ease, color 0.3s ease;
       display: block;
-      padding: 15px 20px; /* 增加上下和左右的内边距，以扩大间距 */
-      margin-bottom: 5px; /* 增加每个链接之间的下边距 */
+      padding: 15px 20px;
+      /* 增加上下和左右的内边距，以扩大间距 */
+      margin-bottom: 5px;
+      /* 增加每个链接之间的下边距 */
     }
 
-  .sidebar a:hover {
+    .sidebar a:hover {
       background-color: #e9ecef;
       color: #007bff;
     }
 
     /* 激活的链接样式 */
-  .sidebar a.active {
+    .sidebar a.active {
       background-color: #007bff;
       color: #fff;
     }
 
     /* 头像和用户名容器样式 */
-  .user-info {
+    .user-info {
       display: flex;
       align-items: center;
       padding: 10px;
       transition: background-color 0.3s ease;
     }
 
-  .user-info:hover {
+    .user-info:hover {
       background-color: #e9ecef;
     }
 
     /* 头像样式 */
-  .user-info img {
+    .user-info img {
       width: 32px;
       height: 32px;
       border-radius: 50%;
@@ -64,12 +66,12 @@
       transition: transform 0.3s ease;
     }
 
-  .user-info:hover img {
+    .user-info:hover img {
       transform: scale(1.1);
     }
 
     /* 下拉菜单样式 */
-  .dropdown-menu {
+    .dropdown-menu {
       animation: dropdownAnimation 0.3s ease;
     }
 
@@ -78,12 +80,17 @@
         opacity: 0;
         transform: translateY(-10px);
       }
+
       100% {
         opacity: 1;
         transform: translateY(0);
       }
     }
   </style>
+
+  <script async defer
+    src="http://localhost:8080/api/application/embed?protocol=http&host=localhost:8080&token=21214db98103b71c">
+    </script>
 </head>
 
 <body>
@@ -152,7 +159,7 @@
   <div>
     {% if images.count == 0 %}
     <div style="margin-left: 420px; margin-top: 80px;">
-        <h1>暂无图片</h1>
+      <h1>暂无图片</h1>
     </div>
     {% endif %}
   </div>
