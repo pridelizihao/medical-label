@@ -156,6 +156,14 @@ def save_annotation1(request, image_id):
     image.save()
     return render(request,"annotate_image.html", {'image': image,})
 
+@login_required
+def save_annotation2(request, image_id):
+    image = user_image.objects.get(id=image_id)
+    image.isailabeled = True
+    image.time = datetime.datetime.now()
+    image.save()
+    return render(request,"annotate_image_model.html", {'image': image,})
+
 def page(request):
     return render(request, '1.html')
 
