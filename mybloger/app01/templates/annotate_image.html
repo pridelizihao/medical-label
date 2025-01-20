@@ -87,7 +87,6 @@
       }
     }
   </style>
-
   <script async defer
     src="http://localhost:8080/api/application/embed?protocol=http&host=localhost:8080&token=21214db98103b71c">
     </script>
@@ -286,10 +285,13 @@
           rectangles[i].image_name = "{{image.name}}";
         }
         $.ajax({
-          url: '{{rectjsondata_url}}',
+          url: "{% url 'annotation:rectjsondata' %}",
           type: 'POST',
           contentType: 'application/json',
           data: JSON.stringify(rectangles),
+          headers: {
+            'X-CSRFToken': '{{ csrf_token }}' // 确保 csrf_token 能正确传递
+          },
           success: function () {
             alert('成功保存');
             window.location.href = '/image_is_labeled';
@@ -305,6 +307,9 @@
           type: 'POST',
           contentType: 'application/json',
           data: JSON.stringify(polygon),
+          headers: {
+            'X-CSRFToken': '{{ csrf_token }}' // 确保 csrf_token 能正确传递
+          },
           success: function () {
             alert('成功保存');
             window.location.href = '/annotated_images_ku';
@@ -321,6 +326,9 @@
           type: 'POST',
           contentType: 'application/json',
           data: JSON.stringify(circle),
+          headers: {
+            'X-CSRFToken': '{{ csrf_token }}' // 确保 csrf_token 能正确传递
+          },
           success: function () {
             alert('成功保存');
             window.location.href = '/annotated_images_ku';
@@ -337,6 +345,9 @@
           type: 'POST',
           contentType: 'application/json',
           data: JSON.stringify(pencil),
+          headers: {
+            'X-CSRFToken': '{{ csrf_token }}' // 确保 csrf_token 能正确传递
+          },
           success: function () {
             alert('成功保存');
             window.location.href = '/annotated_images_ku';

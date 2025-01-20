@@ -2,9 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse  
 from django.views.decorators.http import require_http_methods
 from.models import label, rectdata, polygondata, circledata, pencildata
+import json
 
 # Create your views here.
-def coordinate_data(request):
+def rectjsonndata(request):
     if request.is_json():
         data = request.get_json()
         # do something with the data
