@@ -102,7 +102,7 @@ def person(request):
     return render(request, 'person.html')
 
 def home(request):
-    num1 = user_image.objects.filter(user_id = request.user.id).count()
+    num1 = user_image.objects.filter(user_id = request.user.id, islabeled=False, isailabeled=False).count()
     num2 = user_image.objects.filter(user_id = request.user.id, islabeled=True).count()
     num3 = user_image.objects.filter(user_id = request.user.id, isailabeled=True).count()
     return render(request, 'home.html',{'num1':num1,'num2':num2,'num3':num3})

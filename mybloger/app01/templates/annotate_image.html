@@ -276,7 +276,7 @@
 
     }
 
-
+    
     function sendjsondata() {
       var inputs = document.getElementsByTagName('input');
       if (flag == 0) {
@@ -295,6 +295,11 @@
           success: function () {
             alert('成功保存');
             window.location.href = '/image_is_labeled';
+          },
+          error: function (xhr, status, error) {
+            console.error('请求失败:', status, error);
+            alert('保存失败，请检查网络连接或联系管理员');
+            console.log(xhr.responseText);
           }
         })
       }
