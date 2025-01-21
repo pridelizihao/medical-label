@@ -3,26 +3,35 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_http_methods
 from.models import label, rectdata, polygondata, circledata, pencildata
 import json
+from django.views.decorators.csrf import csrf_exempt
 
-# Create your views here.
-def rectjsonndata(request):
-    if request.is_json():
-        data = request.get_json()
-        # do something with the data
-        for i in data:
-            rect = rectdata(
-                image_name=i['image_name'],
-                text=i['text'],
-                startx=i['startx'],
-                starty=i['starty'],
-                endx=i['endx'],
-                endy=i['endy'],
-                label_id=i['label_id']
-            )
-            rect.save()
-        return HttpResponse("success")
-    else:
-        return HttpResponse("error")
+@csrf_exempt
+def rectjsondata(request):
+    try:
+        if request.method == 'POST':
+            try:
+                data = json.loads(request.body)
+                print(data)
+                # 处理接收到的数据
+                for i in data:
+                    rect = rectdata(
+                        image_name=i.get('image_name'),
+                        text=i.get('text'),
+                        startx=i.get('startx'),
+                        starty=i.get('starty'),
+                        endx=i.get('endx'),
+                        endy=i.get('endy'),
+                    )
+                    rect.save()
+                return HttpResponse("success")
+            except Exception as e:
+                # 处理 JSON 解析错误或 rect 保存错误
+                print(f"Error occurred while processing data: {str(e)}")
+                return HttpResponse(f"Error: {str(e)}", status=500)
+        else:
+            return HttpResponse("error")
+    except json.JSONDecodeError:
+        return HttpResponse("Invalid JSON data", status=400)
 
     
 def circlejsonndata(request):

@@ -215,6 +215,7 @@
 
 
   <script>
+    
     var canvas = document.getElementById('myCanvas');
     var ctx = canvas.getContext('2d');
     var rectangles = [];
@@ -282,7 +283,7 @@
       if (flag == 0) {
         for (let i = 0; i < inputs.length; i++) {
           rectangles[i].text = inputs[i].value;
-          rectangles[i].image_name = "{{image.name}}";
+          rectangles[i].image_name = "{{image.image.name}}";
         }
         $.ajax({
           url: "{% url 'annotation:rectjsondata' %}",
@@ -294,7 +295,6 @@
           },
           success: function () {
             alert('成功保存');
-            window.location.href = '/image_is_labeled';
           },
           error: function (xhr, status, error) {
             console.error('请求失败:', status, error);
@@ -302,6 +302,7 @@
             console.log(xhr.responseText);
           }
         })
+
       }
       if (flag == 1) {
         for (let i = 0; i < inputs.length; i++) {

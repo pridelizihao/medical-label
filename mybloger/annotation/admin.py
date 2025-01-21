@@ -4,9 +4,7 @@ from.models import  label,rectdata,circledata,polygondata
 # Register your models here.
 @admin.register(rectdata)
 class rectdataAdmin(admin.ModelAdmin):
-    list_display =  ('id', 'label_id', 'image_name', 'text','startx','starty', 'endx', 'endy', 'create_time') 
-    list_filter = ('label_id', "id")
-    search_fields = ('label_id', "id")
+    list_display =  ('id' ,'image_name', 'text','startx','starty', 'endx', 'endy', 'create_time') 
 
 @admin.register(circledata)
 class circledataAdmin(admin.ModelAdmin):

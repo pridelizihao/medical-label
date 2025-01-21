@@ -16,11 +16,10 @@ class rectdata(models.Model):
     starty = models.IntegerField()
     endx = models.IntegerField()
     endy = models.IntegerField()
-    label_id = models.ForeignKey(label, on_delete=models.CASCADE)
     create_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return "(%s, %s, %s, %s, %s, %s, %s, %s, %s)" % (self.id, self.image_name, self.text, self.startx, self.starty, self.endx, self.endy, self.label_id, self.create_time)          
+        return "(%s, %s, %s, %s, %s, %s, %s, %s)" % (self.id, self.image_name, self.text, self.startx, self.starty, self.endx, self.endy, self.create_time)          
 
 class polygondata(models.Model):
     id = models.AutoField(primary_key=True)
