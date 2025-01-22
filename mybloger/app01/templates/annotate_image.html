@@ -282,9 +282,12 @@
       var inputs = document.getElementsByTagName('input');
       if (flag == 0) {
         for (let i = 0; i < inputs.length; i++) {
-          rectangles[i].text = inputs[i].value;
-          rectangles[i].image_name = "{{image.image.name}}";
-        }
+                    // 使用 push 方法添加元素，避免数组越界
+                    rectangles.push({
+                        text: inputs[i].value,
+                        image_name: "{{image.name}}"
+                    });
+                }
         $.ajax({
           url: "{% url 'annotation:rectjsondata' %}",
           type: 'POST',
@@ -302,7 +305,6 @@
             console.log(xhr.responseText);
           }
         })
-
       }
       if (flag == 1) {
         for (let i = 0; i < inputs.length; i++) {
