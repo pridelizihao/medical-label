@@ -12,10 +12,11 @@ class rectdata(models.Model):
     id = models.AutoField(primary_key=True)
     image_name = models.CharField(max_length=200)
     text = models.CharField(max_length=200)
-    startx = models.IntegerField()
-    starty = models.IntegerField()
-    endx = models.IntegerField()
-    endy = models.IntegerField()
+    # 设置默认数据
+    startx = models.IntegerField(default=0)
+    starty = models.IntegerField(default=0)
+    endx = models.IntegerField(default=100)
+    endy = models.IntegerField(default=100)
     create_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
