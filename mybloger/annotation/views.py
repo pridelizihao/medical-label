@@ -17,10 +17,10 @@ def rectjsondata(request):
                     rect = rectdata(
                         image_name=i.get('image_name',"默认name"),
                         text=i.get('text',"默认text"),
-                        startx=i.get('startx',0),
-                        starty=i.get('starty',0),
-                        endx=i.get('endx',100),
-                        endy=i.get('endy',100),
+                        startx=i.get('startX',0),
+                        starty=i.get('startY',0),
+                        endx=i.get('endX',100),
+                        endy=i.get('endY',100),
                     )
                     rect.save()
                 return HttpResponse("success")

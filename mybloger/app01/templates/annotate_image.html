@@ -218,19 +218,7 @@
     
     var canvas = document.getElementById('myCanvas');
     var ctx = canvas.getContext('2d');
-    var rectangles = [
-            // 默认数据
-            {
-                text: '默认数据',
-                image_name: "{{image.name}}",
-                startx: 0,
-                starty: 0,
-                endx: 100,
-                endy: 100,
-                label_id: 1,
-                
-            } 
-        ];
+    var rectangles = [];
     var isDragging = false;
     var currentRect = { startX: 0, startY: 0, endX: 0, endY: 0, text: "", image_name: "" };
     var points = [];
@@ -292,13 +280,13 @@
     
     function sendjsondata() {
       var inputs = document.getElementsByTagName('input');
+      alert(inputs.length);
+      alert(JSON.stringify(rectangles))
       if (flag == 0) {
-        for (let i = 0; i < inputs.length; i++) {
+        for (let i = 0; i < inputs.length-1; i++) {
                     // 使用 push 方法添加元素，避免数组越界
-                    rectangles.push({
-                        text: inputs[i].value,
-                        image_name: "{{image.name}}"
-                    });
+                    rectangles[i].text = inputs[i].value;
+                    rectangles[i].image_name = "{{image.name}}";
                 }
         $.ajax({
           url: "{% url 'annotation:rectjsondata' %}",

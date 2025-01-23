@@ -10,7 +10,7 @@ class label(models.Model):
 
 class rectdata(models.Model):
     id = models.AutoField(primary_key=True)
-    image_name = models.CharField(max_length=200)
+    image_name = models.CharField(max_length=200,default='默认名字')
     text = models.CharField(max_length=200,default='默认数据')
     # 设置默认数据
     startx = models.IntegerField(default=0)
