@@ -218,7 +218,19 @@
     
     var canvas = document.getElementById('myCanvas');
     var ctx = canvas.getContext('2d');
-    var rectangles = [];
+    var rectangles = [
+            // 默认数据
+            {
+                text: '默认数据',
+                image_name: "{{image.name}}",
+                startx: 0,
+                starty: 0,
+                endx: 100,
+                endy: 100,
+                label_id: 1,
+                
+            } 
+        ];
     var isDragging = false;
     var currentRect = { startX: 0, startY: 0, endX: 0, endY: 0, text: "", image_name: "" };
     var points = [];

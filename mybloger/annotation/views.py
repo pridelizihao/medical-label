@@ -15,12 +15,12 @@ def rectjsondata(request):
                 # 处理接收到的数据
                 for i in data:
                     rect = rectdata(
-                        image_name=i.get('image_name'),
-                        text=i.get('text'),
-                        startx=i.get('startx'),
-                        starty=i.get('starty'),
-                        endx=i.get('endx'),
-                        endy=i.get('endy'),
+                        image_name=i.get('image_name',"默认name"),
+                        text=i.get('text',"默认text"),
+                        startx=i.get('startx',0),
+                        starty=i.get('starty',0),
+                        endx=i.get('endx',100),
+                        endy=i.get('endy',100),
                     )
                     rect.save()
                 return HttpResponse("success")
