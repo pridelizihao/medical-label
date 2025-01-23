@@ -8,15 +8,13 @@ class rectdataAdmin(admin.ModelAdmin):
 
 @admin.register(circledata)
 class circledataAdmin(admin.ModelAdmin):
-    list_display =  ('id', 'label_id', 'image_name', 'text', 'x', 'y', 'r', 'create_time') 
-    list_filter = ('label_id', "id")
-    search_fields = ('label_id', "id")
+    list_display =  ('id','image_name', 'text', 'x', 'y', 'r', 'create_time') 
+
 
 @admin.register(polygondata)
 class polygondataAdmin(admin.ModelAdmin):
-    list_display =  ('id', 'label_id','image_name', 'text', 'polygon', 'create_time') 
-    list_filter = ('label_id', "id")
-    search_fields = ('label_id', "id")
+    list_display =  ('id', 'image_name', 'text', 'polygon', 'create_time') 
+ 
 
 @admin.register(label)
 class labelAdmin(admin.ModelAdmin):

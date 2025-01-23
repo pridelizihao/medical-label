@@ -5,8 +5,8 @@ app_name = 'annotation'
 
 urlpatterns = [
     path('rectjsondata/', views.rectjsondata, name='rectjsondata'),
-    path('circlejsonndata/', views.circlejsonndata, name='circlejsonndata'),
-    path('polygonjsonndata/', views.polygonjsonndata, name='polygonjsonndata'),
+    path('circlejsondata/', views.circlejsonndata, name='circlejsondata'),
+    path('polygonjsondata/', views.polygonjsonndata, name='polygonjsondata'),
     path("penciljsondata/", views.penciljsondata, name="penciljsondata"),
     path('label_list/', views.label_list, name='label_list'),
 ]

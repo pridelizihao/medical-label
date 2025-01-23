@@ -35,56 +35,78 @@ def rectjsondata(request):
 
     
 def circlejsonndata(request):
-    if request.is_json():
-        data = request.get_json()
-        # do something with the data
-        for i in data:
-            circle = circledata(
-                image_name=i['image_name'],
-                text=i['text'],
-                x=i['x'],
-                y=i['y'],
-                r=i['r'],
-                label_id=i['label_id']
-            )
-            circle.save()
-        return HttpResponse("success")
-    else:
-        return HttpResponse("error")
+    try:
+        if request.method == 'POST':
+            try:
+                data = json.loads(request.body)
+                print(data)
+                # 处理接收到的数据
+                for i in data:
+                    circle = circledata(
+                        image_name=i.get('image_name',"默认name"),
+                        text=i.get('text',"默认text"),
+                        x=i.get('X',0),
+                        y=i.get('Y',0),
+                        r=i.get('R',10),
+                    )
+                    circle.save()
+                return HttpResponse("success")
+            except Exception as e:
+                # 处理 JSON 解析错误或 circle 保存错误
+                print(f"Error occurred while processing data: {str(e)}")
+                return HttpResponse(f"Error: {str(e)}", status=500)
+        else:
+            return HttpResponse("error")
+    except json.JSONDecodeError:
+        return HttpResponse("Invalid JSON data", status=400)
 
     
 def polygonjsonndata(request):
-    if request.is_json():
-        data = request.get_json()
-        # do something with the data
-        for i in data:
-            polygon = polygondata(
-                image_name=i['image_name'],
-                text=i['text'],
-                polygon=i['polygon'],
-                label_id=i['label_id']
-            )
-            polygon.save()
-        return HttpResponse("success")
-    else:
-        return HttpResponse("error")
+    try:
+        if request.method == 'POST':
+            try:    
+                data = json.loads(request.body)
+                # 处理接收到的数据
+                for i in data:
+                    polygon = polygondata(
+                        image_name=i.get('image_name',"默认name"),
+                        text=i.get('text',"默认text"),
+                        polygon=i.get('polygon',[[0,0],[100,0],[100,100],[0,100]]),
+                    )
+                    polygon.save()
+                return HttpResponse("success")
+            except Exception as e:
+                # 处理 JSON 解析错误或 polygon 保存错误
+                print(f"Error occurred while processing data: {str(e)}")
+                return HttpResponse(f"Error: {str(e)}", status=500)
+        else:
+            return HttpResponse("error")
+    except json.JSONDecodeError:
+        return HttpResponse("Invalid JSON data", status=400)
 
 def penciljsondata(request):
-    if request.is_json():
-        data = request.get_json()
-        # do something with the data
-        for i in data:
-            pencil = pencildata(
-                image_name=i['image_name'],
-                text=i['text'],
-                x=i['x'],
-                y=i['y'],
-                label_id=i['label_id']
-            )
-            pencil.save()
-        return HttpResponse("success")
-    else:
-        return HttpResponse("error")
+    try:
+        if request.method == 'POST':
+            try:
+                data = json.loads(request.body)
+                # 处理接收到的数据
+                for i in data:
+                    pencil = pencildata(
+                        image_name=i.get('image_name',"默认name"),
+                        text=i.get('text',"默认text"),
+                        points=i.get('points',[[0,0],[100,0],[100,100],[0,100]]),
+                    )
+                    pencil.save()
+                return HttpResponse("success")
+            except Exception as e:
+                # 处理 JSON 解析错误或 pencil 保存错误
+                print(f"Error occurred while processing data: {str(e)}")
+                return HttpResponse(f"Error: {str(e)}", status=500)
+        else:
+            return HttpResponse("error")
+    except json.JSONDecodeError:
+        return HttpResponse("Invalid JSON data", status=400)
+    
     
 def label_list(request):
     labels = label.objects.all()

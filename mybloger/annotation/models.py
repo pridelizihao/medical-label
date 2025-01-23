@@ -28,11 +28,10 @@ class polygondata(models.Model):
     text = models.CharField(max_length=200)
     # 多边形的各个顶点坐标
     polygon = models.TextField(("Polygon"))
-    label_id = models.ForeignKey(label, on_delete=models.CASCADE)
     create_time = models.DateTimeField(default=datetime.datetime.now())
 
     def __str__(self):
-        return "(%s, %s, %s, %s, %s, %s)" % (self.id, self.image_name, self.text, self.polygon, self.label_id, self.create_time)          
+        return "(%s, %s, %s, %s, %s)" % (self.id, self.image_name, self.text, self.polygon, self.create_time)          
 
 class circledata(models.Model):
     id = models.AutoField(primary_key=True)
@@ -41,11 +40,10 @@ class circledata(models.Model):
     x = models.IntegerField()
     y = models.IntegerField()
     r = models.IntegerField()
-    label_id = models.ForeignKey(label, on_delete=models.CASCADE)
     create_time = models.DateTimeField(default=datetime.datetime.now())
 
     def __str__(self):
-        return "(%s, %s, %s, %s, %s, %s, %s, %s)" % (self.id, self.image_name, self.text, self.x, self.y, self.r, self.label_id, self.create_time)          
+        return "(%s, %s, %s, %s, %s, %s, %s)" % (self.id, self.image_name, self.text, self.x, self.y, self.r, self.create_time)          
 
   
 class pencildata(models.Model):
@@ -53,7 +51,6 @@ class pencildata(models.Model):
     image_name = models.CharField(max_length=200)
     text = models.CharField(max_length=200)
     pencil = models.TextField(max_length=200)
-    label_id = models.ForeignKey(label, on_delete=models.CASCADE)
     create_time = models.DateTimeField(default=datetime.datetime.now())
 
     def __str__(self):
