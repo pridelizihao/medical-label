@@ -1,5 +1,5 @@
 from django.contrib import admin
-from.models import  label,rectdata,circledata,polygondata
+from.models import  label,rectdata,circledata,polygondata,pencildata
 
 # Register your models here.
 @admin.register(rectdata)
@@ -14,6 +14,10 @@ class circledataAdmin(admin.ModelAdmin):
 @admin.register(polygondata)
 class polygondataAdmin(admin.ModelAdmin):
     list_display =  ('id', 'image_name', 'text', 'polygon', 'create_time') 
+
+@admin.register(pencildata)
+class pencildataAdmin(admin.ModelAdmin):
+    list_display =  ('id', 'image_name', 'text', "pencil", 'create_time') 
  
 
 @admin.register(label)

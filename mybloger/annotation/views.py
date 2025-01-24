@@ -66,12 +66,13 @@ def polygonjsonndata(request):
         if request.method == 'POST':
             try:    
                 data = json.loads(request.body)
+                print(data)
                 # 处理接收到的数据
                 for i in data:
                     polygon = polygondata(
                         image_name=i.get('image_name',"默认name"),
                         text=i.get('text',"默认text"),
-                        polygon=i.get('polygon',[[0,0],[100,0],[100,100],[0,100]]),
+                        polygon=i.get('points',[[0,0],[100,0],[100,100],[0,100]]),
                     )
                     polygon.save()
                 return HttpResponse("success")
@@ -89,12 +90,13 @@ def penciljsondata(request):
         if request.method == 'POST':
             try:
                 data = json.loads(request.body)
+                print(data)
                 # 处理接收到的数据
                 for i in data:
                     pencil = pencildata(
                         image_name=i.get('image_name',"默认name"),
                         text=i.get('text',"默认text"),
-                        points=i.get('points',[[0,0],[100,0],[100,100],[0,100]]),
+                        pencil=i.get('points',[[0,0],[100,0],[100,100],[0,100]]),
                     )
                     pencil.save()
                 return HttpResponse("success")

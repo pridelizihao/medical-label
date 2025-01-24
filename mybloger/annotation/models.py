@@ -50,7 +50,7 @@ class pencildata(models.Model):
     id = models.AutoField(primary_key=True) 
     image_name = models.CharField(max_length=200)
     text = models.CharField(max_length=200)
-    pencil = models.TextField(max_length=200)
+    pencil = models.TextField(("Pencil"))
     create_time = models.DateTimeField(default=datetime.datetime.now())
 
     def __str__(self):
