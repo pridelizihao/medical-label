@@ -170,7 +170,7 @@ def saveimage(request, image_id):
                 # 获取对应的 user_image 实例
                 original = user_image.objects.get(id=image_id)
                 # 将 ContentFile 对象赋值给模型的 image 字段
-                original.image.save(f'{image_id}.png', file_content)
+                original.image.save(f'{original.name}.png', file_content)
                 original.save()
                 
                 print("image saved")
