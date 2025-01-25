@@ -188,7 +188,7 @@
         </div>
         <form action="" method="post" enctype="multipart/form-data">
           {% csrf_token %}
-          <button style="margin-left:20px;margin-top:0px" onclick="sendjsondata()" class="btn btn-success"> <i
+          <button style="margin-left:20px;margin-top:0px" onclick="sendjsondata();saveImage()" class="btn btn-success"> <i
               class="fas fa-save"></i> 保存</button>
         </form>
       </div>
@@ -207,7 +207,6 @@
       </div>
 
     </div>
-
 
   </div>
   </br>
@@ -285,7 +284,6 @@
       alert(JSON.stringify(circle));
       alert(JSON.stringify(polygon));
       alert(JSON.stringify(pencil));
-      var imageData = canvas.toDataURL("image/png");
       if (flag == 0) {
         for (let i = 0; i < inputs.length-1; i++) {
                     // 使用 push 方法添加元素，避免数组越界
@@ -317,7 +315,7 @@
           polygon[i].image_name = "{{image.name}}";
         }
         $.ajax({
-          url: "{% url 'annotation:polygonjsondata' %}",
+          url: "{% url 'annotation:polygonjsondata' image.id 1 %}",
           type: 'POST',
           contentType: 'application/json',
           data: JSON.stringify(polygon),
@@ -341,7 +339,7 @@
           circle[i].image_name = "{{image.name}}";
         }
         $.ajax({
-          url: '{% url "annotation:circlejsondata" %}',
+          url: '{% url "annotation:circlejsondata" image.id 1 %}',
           type: 'POST',
           contentType: 'application/json',
           data: JSON.stringify(circle),
@@ -366,7 +364,7 @@
           pencil[i].image_name = "{{image.name}}";
         }
         $.ajax({
-          url: "{% url 'annotation:penciljsondata' %}",
+          url: "{% url 'annotation:penciljsondata' image.id 1 %}",
           type: 'POST',
           contentType: 'application/json',
           data: JSON.stringify(pencil),
@@ -386,6 +384,29 @@
 
       }
     };
+
+    function saveImage() {
+      var dataURL = canvas.toDataURL('image/png');
+      
+      $.ajax({
+        url: "{% url 'annotation:saveimage' image.id %}",
+        type: 'POST',
+        data: {
+          'image_data': dataURL,
+        },
+        headers: {
+          'X-CSRFToken': '{{ csrf_token }}' // 确保 csrf_token 能正确传递
+        },
+        success: function () {
+          alert('成功保存');
+        },
+        error: function (xhr, status, error) {
+          console.error('请求失败:', status, error);
+          alert('保存失败，请检查网络连接或联系管理员');
+          console.log(xhr.responseText);
+        }
+      })
+    }
 
 
     canvas.addEventListener('mousedown', function (e) {
@@ -620,7 +641,7 @@
       }
     }
 
-
+    
 
   </script>
 

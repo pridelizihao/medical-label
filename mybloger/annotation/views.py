@@ -6,6 +6,10 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 from app01.models import user_image
 import datetime
+from django.core.files.base import ContentFile
+import base64
+from PIL import Image
+import io
 
 @csrf_exempt
 def rectjsondata(request, image_id, type):
@@ -93,6 +97,7 @@ def polygonjsonndata(request, image_id, type):
                         polygon=i.get('points',[[0,0],[100,0],[100,100],[0,100]]),
                     )
                     polygon.save()
+
                 image = user_image.objects.get(id=image_id)
                 if type == 1:
                     image.islabeled = True
@@ -124,6 +129,7 @@ def penciljsondata(request, image_id, type):
                         pencil=i.get('points',[[0,0],[100,0],[100,100],[0,100]]),
                     )
                     pencil.save()
+
                 image = user_image.objects.get(id=image_id)
                 if type == 1:
                     image.islabeled = True
@@ -140,7 +146,47 @@ def penciljsondata(request, image_id, type):
             return HttpResponse("error")
     except json.JSONDecodeError:
         return HttpResponse("Invalid JSON data", status=400)
-    
+
+@csrf_exempt
+def saveimage(request, image_id):
+    if request.method == 'POST':
+        # 使用 request.POST 获取 Base64 编码的图片数据
+        image_data = request.POST.get('image_data')
+        
+        if image_data:
+            try:
+                # 去除 Base64 编码的前缀
+                data = image_data.split(',')[1]
+                # 解码 Base64 数据
+                image_bytes = base64.b64decode(data)
+                # 使用 PIL 打开图片
+                image = Image.open(io.BytesIO(image_bytes))
+                
+                # 将图像数据转换为 ContentFile 对象
+                buffer = io.BytesIO()
+                image.save(buffer, format="PNG")
+                file_content = ContentFile(buffer.getvalue())
+                
+                # 获取对应的 user_image 实例
+                original = user_image.objects.get(id=image_id)
+                # 将 ContentFile 对象赋值给模型的 image 字段
+                original.image.save(f'{image_id}.png', file_content)
+                original.save()
+                
+                print("image saved")
+                return HttpResponse("success")
+            except user_image.DoesNotExist:
+                print(f"user_image with id {image_id} does not exist.")
+                return HttpResponse("error: image not found", status=404)
+            except Exception as e:
+                print(f"An error occurred: {e}")
+                return HttpResponse("error: internal server error", status=500)
+        else:
+            print("image data is empty")
+            return HttpResponse("error: no image data", status=400)
+    else:
+        print("not a post request")
+        return HttpResponse("error: only POST requests are allowed", status=405)
     
 def label_list(request):
     labels = label.objects.all()
