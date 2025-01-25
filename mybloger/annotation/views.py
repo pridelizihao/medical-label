@@ -4,9 +4,11 @@ from django.views.decorators.http import require_http_methods
 from.models import label, rectdata, polygondata, circledata, pencildata
 import json
 from django.views.decorators.csrf import csrf_exempt
+from app01.models import user_image
+import datetime
 
 @csrf_exempt
-def rectjsondata(request):
+def rectjsondata(request, image_id, type):
     try:
         if request.method == 'POST':
             try:
@@ -23,6 +25,14 @@ def rectjsondata(request):
                         endy=i.get('endY',100),
                     )
                     rect.save()
+                
+                image = user_image.objects.get(id=image_id)
+                if type == 1:
+                    image.islabeled = True
+                elif type == 2:
+                    image.isailabeled = True
+                image.time = datetime.datetime.now()
+                image.save()
                 return HttpResponse("success")
             except Exception as e:
                 # 处理 JSON 解析错误或 rect 保存错误
@@ -34,7 +44,7 @@ def rectjsondata(request):
         return HttpResponse("Invalid JSON data", status=400)
 
     
-def circlejsonndata(request):
+def circlejsonndata(request, image_id, type):
     try:
         if request.method == 'POST':
             try:
@@ -50,6 +60,14 @@ def circlejsonndata(request):
                         r=i.get('R',10),
                     )
                     circle.save()
+                
+                image = user_image.objects.get(id=image_id)
+                if type == 1:
+                    image.islabeled = True
+                elif type == 2:
+                    image.isailabeled = True
+                image.time = datetime.datetime.now()
+                image.save()
                 return HttpResponse("success")
             except Exception as e:
                 # 处理 JSON 解析错误或 circle 保存错误
@@ -61,7 +79,7 @@ def circlejsonndata(request):
         return HttpResponse("Invalid JSON data", status=400)
 
     
-def polygonjsonndata(request):
+def polygonjsonndata(request, image_id, type):
     try:
         if request.method == 'POST':
             try:    
@@ -75,6 +93,13 @@ def polygonjsonndata(request):
                         polygon=i.get('points',[[0,0],[100,0],[100,100],[0,100]]),
                     )
                     polygon.save()
+                image = user_image.objects.get(id=image_id)
+                if type == 1:
+                    image.islabeled = True
+                elif type == 2:
+                    image.isailabeled = True
+                image.time = datetime.datetime.now()
+                image.save()
                 return HttpResponse("success")
             except Exception as e:
                 # 处理 JSON 解析错误或 polygon 保存错误
@@ -85,7 +110,7 @@ def polygonjsonndata(request):
     except json.JSONDecodeError:
         return HttpResponse("Invalid JSON data", status=400)
 
-def penciljsondata(request):
+def penciljsondata(request, image_id, type):
     try:
         if request.method == 'POST':
             try:
@@ -99,6 +124,13 @@ def penciljsondata(request):
                         pencil=i.get('points',[[0,0],[100,0],[100,100],[0,100]]),
                     )
                     pencil.save()
+                image = user_image.objects.get(id=image_id)
+                if type == 1:
+                    image.islabeled = True
+                elif type == 2:
+                    image.isailabeled = True
+                image.time = datetime.datetime.now()
+                image.save()
                 return HttpResponse("success")
             except Exception as e:
                 # 处理 JSON 解析错误或 pencil 保存错误

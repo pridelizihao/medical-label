@@ -4,7 +4,7 @@ from. import views
 app_name = 'annotation'
 
 urlpatterns = [
-    path('rectjsondata/', views.rectjsondata, name='rectjsondata'),
+    path('rectjsondata/<int:image_id>/<int:type>', views.rectjsondata, name='rectjsondata'),
     path('circlejsondata/', views.circlejsonndata, name='circlejsondata'),
     path('polygonjsondata/', views.polygonjsonndata, name='polygonjsondata'),
     path("penciljsondata/", views.penciljsondata, name="penciljsondata"),
