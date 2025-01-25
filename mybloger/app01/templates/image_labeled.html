@@ -161,11 +161,12 @@
     <div style="margin-left: 420px; margin-top: 80px;">
       <h1>暂无图片</h1>
     </div>
-    {% endif %}
-
+    
+    {% else %}
     <div style="margin-left: 420px; margin-top: 80px;">
       <h1>已标注图片</h1>
     </div>
+    {% endif %}
 
     {% for image in images %}
     <div style="margin-left: 420px; margin-top: 80px; display: flex; flex-wrap: wrap; gap: 10px;">
@@ -173,7 +174,7 @@
         <img src="{{ image.image.url }}" class="card-img-top" style="width: 100%; height: auto;" alt="{{ image.name }}">
         <div class="card-body">
           <h5 class="card-title">{{ image.name }}</h5>
-          <p class="card-text">Card text</p>
+          <p class="card-text">标记者：{{ image.author }}</p>
           <p class="card-text"><small class="text-muted">{{ image.time }}</small></p>
         </div>
       </div>
