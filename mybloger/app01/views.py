@@ -119,15 +119,15 @@ def edit_profile(request):
 
 @login_required
 def image_list(request):
-    images = user_image.objects.filter(user_id = request.user.id, islabeled=False, isailabeled=False)
+    images = user_image.objects.filter(user_id = request.user.id, islabeled=False, isailabeled=False).order_by('-time')
     return render(request, 'image_list.html', {'images': images})
 
 def image_labeled(request):
-    images = user_image.objects.filter(user_id = request.user.id, islabeled=True)
+    images = user_image.objects.filter(user_id = request.user.id, islabeled=True).order_by('-time')
     return render(request, 'image_labeled.html', {'images': images})
 
 def image_ailabeled(request):
-    images = user_image.objects.filter(user_id = request.user.id, isailabeled=True)
+    images = user_image.objects.filter(user_id = request.user.id, isailabeled=True).order_by('-time')
     return render(request, 'image_ailabeled.html', {'images': images})
 
 
