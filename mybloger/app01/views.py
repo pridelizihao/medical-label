@@ -105,7 +105,8 @@ def home(request):
     num1 = user_image.objects.filter(user_id = request.user.id, islabeled=False, isailabeled=False).count()
     num2 = user_image.objects.filter(user_id = request.user.id, islabeled=True).count()
     num3 = user_image.objects.filter(user_id = request.user.id, isailabeled=True).count()
-    return render(request, 'home.html',{'num1':num1,'num2':num2,'num3':num3})
+    images = user_image.objects.filter(user_id = request.user.id, islabeled=False, isailabeled=False).order_by('-time')[0:3]
+    return render(request, 'home.html',{'num1':num1,'num2':num2,'num3':num3,'images':images})
 
 @login_required
 def profile(request):

@@ -277,16 +277,16 @@
             <div id="imageCarousel" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img src="http://127.0.0.1:5000/static/sucai/annotation1.jpg"
+                        <img src="{{images.0.image.url}}"
                             style="width: 800px; height: 300px;" class="d-block w-100" alt="第一张图片">
                     </div>
                     <div class="carousel-item">
-                        <img src="http://127.0.0.1:5000/static/sucai/annotation4.jpeg"
+                        <img src="{{images.1.image.url}}"
                             style="width: 800px; height: 300px;" class="d-block w-100" alt="第二张图片">
                     </div>
                     <div class="carousel-item">
-                        <img src="http://127.0.0.1:5000/static/sucai/annotation.jpg"
-                            style="width: 800px; height: 300px;" class="d-block w-100" alt="第二张图片">
+                        <img src="{{images.2.image.url}}"
+                            style="width: 800px; height: 300px;" class="d-block w-100" alt="第三张图片">
                     </div>
                     <!-- 在这里添加更多走马灯项 -->
                 </div>
@@ -323,7 +323,7 @@
                 <h3 style="color:black">最近标注的一张图片为：</h3>
                 <div style="width: 300px; height: 300px">
                     <img style="width: 300px; height: 300px"
-                        src="http://127.0.0.1:5000/static/annotationimages/{{lastimg}}">
+                        src="{{images.0.image.url}}" alt="最近标注的图片">
                 </div>
             </div>
 
