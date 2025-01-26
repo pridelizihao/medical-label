@@ -27,6 +27,7 @@ def rectjsondata(request, image_id, type):
                         starty=i.get('startY',0),
                         endx=i.get('endX',100),
                         endy=i.get('endY',100),
+                        imageid=user_image.objects.get(id=image_id),
                     )
                     rect.save()
                 
@@ -62,6 +63,7 @@ def circlejsonndata(request, image_id, type):
                         x=i.get('X',0),
                         y=i.get('Y',0),
                         r=i.get('R',10),
+                        imageid=user_image.objects.get(id=image_id),
                     )
                     circle.save()
                 
@@ -95,6 +97,7 @@ def polygonjsonndata(request, image_id, type):
                         image_name=i.get('image_name',"默认name"),
                         text=i.get('text',"默认text"),
                         polygon=i.get('points',[[0,0],[100,0],[100,100],[0,100]]),
+                        imageid=user_image.objects.get(id=image_id),
                     )
                     polygon.save()
 
@@ -127,6 +130,7 @@ def penciljsondata(request, image_id, type):
                         image_name=i.get('image_name',"默认name"),
                         text=i.get('text',"默认text"),
                         pencil=i.get('points',[[0,0],[100,0],[100,100],[0,100]]),
+                        imageid=user_image.objects.get(id=image_id),
                     )
                     pencil.save()
 

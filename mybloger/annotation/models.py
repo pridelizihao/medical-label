@@ -11,6 +11,7 @@ class label(models.Model):
 class rectdata(models.Model):
     id = models.AutoField(primary_key=True)
     image_name = models.CharField(max_length=200,default='默认名字')
+    imageid = models.ForeignKey(app01_models.user_image, on_delete=models.CASCADE)
     text = models.CharField(max_length=200,default='默认数据')
     # 设置默认数据
     startx = models.IntegerField(default=0)
@@ -28,6 +29,7 @@ class polygondata(models.Model):
     text = models.CharField(max_length=200)
     # 多边形的各个顶点坐标
     polygon = models.TextField(("Polygon"))
+    imageid = models.ForeignKey(app01_models.user_image, on_delete=models.CASCADE)
     create_time = models.DateTimeField(default=datetime.datetime.now())
 
     def __str__(self):
@@ -40,6 +42,7 @@ class circledata(models.Model):
     x = models.IntegerField()
     y = models.IntegerField()
     r = models.IntegerField()
+    imageid = models.ForeignKey(app01_models.user_image, on_delete=models.CASCADE)
     create_time = models.DateTimeField(default=datetime.datetime.now())
 
     def __str__(self):
@@ -51,7 +54,8 @@ class pencildata(models.Model):
     image_name = models.CharField(max_length=200)
     text = models.CharField(max_length=200)
     pencil = models.TextField(("Pencil"))
+    imageid = models.ForeignKey(app01_models.user_image, on_delete=models.CASCADE)
     create_time = models.DateTimeField(default=datetime.datetime.now())
 
     def __str__(self):
-        return "(%s, %s, %s, %s)" % (self.id, self.image_name, self.pencil, self.text)          
+        return "(%s, %s, %s, %s )" % (self.id, self.image_name, self.pencil, self.text)          

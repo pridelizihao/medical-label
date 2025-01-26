@@ -4,20 +4,20 @@ from.models import  label,rectdata,circledata,polygondata,pencildata
 # Register your models here.
 @admin.register(rectdata)
 class rectdataAdmin(admin.ModelAdmin):
-    list_display =  ('id' ,'image_name', 'text','startx','starty', 'endx', 'endy', 'create_time') 
+    list_display =  ('id' ,'image_name', 'text','startx','starty', 'endx', 'endy', 'imageid' ,'create_time') 
 
 @admin.register(circledata)
 class circledataAdmin(admin.ModelAdmin):
-    list_display =  ('id','image_name', 'text', 'x', 'y', 'r', 'create_time') 
+    list_display =  ('id','image_name', 'text', 'x', 'y', 'r','imageid', 'create_time') 
 
 
 @admin.register(polygondata)
 class polygondataAdmin(admin.ModelAdmin):
-    list_display =  ('id', 'image_name', 'text', 'polygon', 'create_time') 
+    list_display =  ('id', 'image_name', 'text', 'polygon','imageid', 'create_time') 
 
 @admin.register(pencildata)
 class pencildataAdmin(admin.ModelAdmin):
-    list_display =  ('id', 'image_name', 'text', "pencil", 'create_time') 
+    list_display =  ('id', 'image_name', 'text', "pencil", 'imageid', 'create_time') 
  
 
 @admin.register(label)
