@@ -223,3 +223,5 @@ def delete_polygon(request, polygon_id):
     polygon.delete()
     return HttpResponse("success")  
 
+def labeledshow(request):
+    return render(request, 'labeledshow.html')
