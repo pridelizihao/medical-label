@@ -223,5 +223,10 @@ def delete_polygon(request, polygon_id):
     polygon.delete()
     return HttpResponse("success")  
 
-def labeledshow(request):
-    return render(request, 'labeledshow.html')
+def labeledshow(request, image_id):
+    image = get_object_or_404(user_image, id=image_id)
+    rectjsondata = rectdata.objects.filter(imageid=image_id)
+    circlejsondata = circledata.objects.filter(imageid=image_id)
+    polygonjsondata = polygondata.objects.filter(imageid=image_id)
+    penciljsondata = pencildata.objects.filter(imageid=image_id)
+    return render(request, 'labeledshow.html',{'image': image, 'rectjsondata': rectjsondata, 'circlejsondata': circlejsondata, 'polygonjsondata': polygonjsondata, 'penciljsondata': penciljsondata})

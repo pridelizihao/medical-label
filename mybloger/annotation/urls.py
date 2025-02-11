@@ -10,5 +10,5 @@ urlpatterns = [
     path("penciljsondata/<int:image_id>/<int:type>", views.penciljsondata, name="penciljsondata"),
     path('saveimage/<int:image_id>', views.saveimage, name='saveimage'),
     path('label_list/', views.label_list, name='label_list'),
-    path('labeledshow/', views.labeledshow, name='labeledshow'),
+    path('labeledshow/<int:image_id>', views.labeledshow, name='labeledshow'),
 ]

@@ -171,8 +171,9 @@
     {% for image in images %}
     <div style="margin-left: 420px; margin-top: 80px; display: flex; flex-wrap: wrap; gap: 10px;">
       <div class="card" style="width: 30%; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
-        <a href="{% url 'annotation:labeledshow' %}">
-        <img src="{{ image.image.url }}" class="card-img-top" style="width: 100%; height: auto;" alt="{{ image.name }}"> </a>
+        <a href="{% url 'annotation:labeledshow' image.id %}">
+        <img src="{{ image.image.url }}" class="card-img-top" style="width: 100%; height: auto;" alt="{{ image.name }}"></a>
+        
         <div class="card-body">
           <h5 class="card-title">{{ image.name }}</h5>
           <p class="card-text">标记者：{{ image.author }}</p>
